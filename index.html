@@ -1,0 +1,986 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>J Nat Coffee — Menu</title>
+<style>
+  :root{
+    --cream:#FAF6EF;
+    --paper:#FBF8F2;
+    --ink:#2A2118;
+    --brown:#4A372A;
+    --clay:#A8693E;
+    --clay-soft:#C98B5E;
+    --line:#E4DCC8;
+    --green:#5C6B4F;
+    --cover:#3B2A20;
+    --cover-light:#4E3A2B;
+    --gold:#C9A464;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html,body{
+    height:100%;
+    overflow:hidden;
+    background:#1E1610;
+    font-family:'Source Sans Pro', Helvetica, Arial, sans-serif;
+    color:var(--ink);
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  h1,h2,h3,.amharic{
+    font-family:'Georgia','Noto Serif Ethiopic', serif;
+    font-weight:400;
+  }
+
+  /* ===== Room / stage ===== */
+  .stage{
+    height:100%;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:radial-gradient(ellipse at 50% 40%, #2B2118 0%, #1A130D 75%);
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* faint ambient drifting glow for atmosphere */
+  .stage::before{
+    content:"";
+    position:absolute;
+    width:140%;height:140%;
+    background:radial-gradient(circle at 30% 30%, rgba(201,164,100,0.06), transparent 60%);
+    animation:driftGlow 14s ease-in-out infinite alternate;
+    pointer-events:none;
+  }
+  @keyframes driftGlow{
+    0%{ transform:translate(-4%,-3%) scale(1); }
+    100%{ transform:translate(4%,3%) scale(1.08); }
+  }
+
+  /* ===== Book ===== */
+  .book{
+    position:relative;
+    width:min(94vw, 1180px);
+    height:min(84vh, 720px);
+    perspective:2600px;
+    opacity:0;
+    transform:translateY(18px) scale(0.97);
+    animation:bookEnter 0.9s cubic-bezier(.2,.7,.2,1) 0.05s forwards;
+  }
+  @keyframes bookEnter{
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .spread{
+    position:absolute;
+    inset:0;
+    display:flex;
+    border-radius:6px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.55), 0 4px 18px rgba(0,0,0,0.4);
+    background:var(--cover);
+    transition:box-shadow 0.4s ease;
+  }
+
+  .spine{
+    position:absolute;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:14px;
+    margin-left:-7px;
+    background:linear-gradient(90deg, rgba(0,0,0,0.25), rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.05) 70%, rgba(0,0,0,0.25));
+    z-index:40;
+    pointer-events:none;
+    transition:opacity 0.3s ease;
+  }
+
+  .leaf{
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:50%;
+    transform-style:preserve-3d;
+    transition:transform 0.85s cubic-bezier(.45,.05,.18,1);
+    will-change:transform;
+    z-index:5;
+  }
+
+  .leaf.left{ left:0; transform-origin:right center; }
+  .leaf.right{ left:50%; transform-origin:left center; }
+
+  .leaf .face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    background:var(--paper);
+    overflow:hidden;
+    border-radius:6px 0 0 6px;
+  }
+  .leaf.right .face{ border-radius:0 6px 6px 0; }
+
+  .leaf .face.back{
+    transform:rotateY(180deg);
+  }
+
+  /* page curl shading */
+  .leaf .face::after{
+    content:"";
+    position:absolute;
+    top:0; bottom:0;
+    width:36px;
+    pointer-events:none;
+    transition:opacity 0.4s ease;
+  }
+  .leaf.left .face::after{ right:0; background:linear-gradient(to left, rgba(0,0,0,0.10), transparent); }
+  .leaf.right .face::after{ left:0; background:linear-gradient(to right, rgba(0,0,0,0.10), transparent); }
+
+  /* a soft moving shadow that sweeps across while a leaf is turning */
+  .leaf::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg, rgba(0,0,0,0.22), transparent 60%);
+    opacity:0;
+    transition:opacity 0.85s ease;
+    pointer-events:none;
+    z-index:2;
+  }
+  .leaf.turning::before{ opacity:1; }
+
+  /* flipping states */
+  .leaf.flip-right{ transform:rotateY(-180deg); }
+  .leaf.flip-left{ transform:rotateY(180deg); }
+
+  /* ===== Page content ===== */
+  .page-inner{
+    position:absolute;
+    inset:0;
+    padding:42px 38px 30px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* a light one-time settle for headings only — long item lists no longer
+     animate item-by-item, since animating 15-20 elements at once on a
+     content-heavy page competed with the flip animation for paint time
+     and made those pages feel laggier than simpler ones like the cover */
+  .page-head, .cover-face > *, .back-face > *, .blurb{
+    animation:contentSettle 0.45s ease both;
+  }
+  @keyframes contentSettle{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .page-inner.cover-face{
+    background:linear-gradient(160deg, var(--cover), var(--cover-light));
+    color:var(--cream);
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:30px;
+  }
+
+  .cover-face .brandmark{
+    width:74px;height:74px;
+    border:1.4px solid var(--gold);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:22px;
+    animation:brandPulse 3.4s ease-in-out infinite;
+  }
+  @keyframes brandPulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(201,164,100,0.0); transform:scale(1); }
+    50%{ box-shadow:0 0 0 8px rgba(201,164,100,0.08); transform:scale(1.04); }
+  }
+  .cover-face .brandmark svg{ width:34px; height:34px; stroke:var(--gold); fill:none; stroke-width:1.4; }
+
+  .cover-face h1{
+    font-size:2.5rem;
+    letter-spacing:0.02em;
+    color:var(--cream);
+  }
+  .cover-face .amharic{
+    font-size:1.3rem;
+    color:var(--gold);
+    margin-top:6px;
+  }
+  .cover-face .tag{
+    margin-top:18px;
+    font-size:0.82rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:#D8C9AE;
+  }
+  .cover-face .hint{
+    margin-top:34px;
+    font-size:0.78rem;
+    color:#B7A88C;
+    animation:hintFloat 2.2s ease-in-out infinite;
+  }
+  @keyframes hintFloat{
+    0%,100%{ opacity:0.65; transform:translateY(0); }
+    50%{ opacity:1; transform:translateY(-3px); }
+  }
+
+  .page-inner.back-face{
+    background:linear-gradient(160deg, var(--cover-light), var(--cover));
+    color:var(--cream);
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .back-face .hours{ font-size:0.85rem; color:#D8C9AE; margin-bottom:26px; }
+  .back-face .made-by{
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    color:var(--gold);
+    border-top:1px solid rgba(201,164,100,0.3);
+    padding-top:16px;
+    margin-top:6px;
+  }
+  .back-face .made-by a{ color:var(--gold); border-bottom:1px solid var(--gold); text-decoration:none; }
+
+  .page-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:1px solid var(--line);
+    padding-bottom:10px;
+    margin-bottom:16px;
+  }
+  .page-head h2{ font-size:1.5rem; color:var(--ink); }
+  .page-head .amharic{ font-size:1rem; color:var(--clay); }
+
+  .page-num{
+    position:absolute;
+    bottom:14px;
+    font-size:0.72rem;
+    color:var(--clay);
+    letter-spacing:0.06em;
+  }
+  .leaf.left .page-num{ left:38px; }
+  .leaf.right .page-num{ right:38px; }
+
+  .menu-list{
+    overflow-y:auto;
+    flex:1;
+    padding-right:4px;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .menu-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:10px;
+    padding:9px 2px;
+    border-bottom:1px dotted var(--line);
+    border-radius:4px;
+    transition:background 0.2s ease, padding-left 0.2s ease;
+  }
+  .menu-item:hover{ background:rgba(168,105,62,0.06); padding-left:8px; }
+  .menu-item:active{ background:rgba(168,105,62,0.12); }
+
+  .menu-item .name{ display:flex; flex-direction:column; }
+  .menu-item .name .en{ font-size:0.92rem; color:var(--ink); }
+  .menu-item .name .am{ font-size:0.78rem; color:var(--clay); font-family:'Georgia','Noto Serif Ethiopic',serif; margin-top:1px; }
+  .menu-item .price{ font-size:0.85rem; color:var(--brown); font-weight:600; white-space:nowrap; }
+  .menu-item .price::before{ content:"ETB "; font-size:0.62rem; font-weight:400; color:var(--clay); }
+
+  .subhead{
+    font-size:0.85rem;
+    color:var(--green);
+    border-bottom:1px solid var(--line);
+    padding-bottom:5px;
+    margin:14px 0 4px;
+  }
+  .subhead:first-child{ margin-top:0; }
+
+  .contents-list{ list-style:none; flex:1; }
+  .contents-list li{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.95rem;
+    padding:10px 0;
+    border-bottom:1px dotted var(--line);
+    color:var(--brown);
+  }
+  .contents-list li span.no{ color:var(--clay); font-size:0.8rem; }
+
+  .blurb{ color:var(--brown); font-size:0.85rem; margin-bottom:10px; line-height:1.5; }
+
+  /* ===== Controls ===== */
+  .controls{
+    position:absolute;
+    bottom:-58px;
+    left:0; right:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+  }
+
+  .nav-btn{
+    width:42px;height:42px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.18);
+    color:#E8DCC4;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    font-size:1.1rem;
+    user-select:none;
+    flex-shrink:0;
+  }
+  .nav-btn:hover{ background:rgba(255,255,255,0.14); box-shadow:0 0 0 4px rgba(255,255,255,0.04); }
+  .nav-btn:active{ transform:scale(0.88); }
+  .nav-btn.disabled{ opacity:0.25; pointer-events:none; }
+
+  .progress{
+    font-size:0.78rem;
+    color:#B7A88C;
+    letter-spacing:0.05em;
+    min-width:64px;
+    text-align:center;
+    transition:opacity 0.2s ease;
+  }
+
+  .tabs{
+    position:absolute;
+    top:-46px;
+    left:0; right:0;
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    flex-wrap:wrap;
+    padding:0 10px;
+  }
+  .tabs button{
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+    color:#C9BBA0;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:999px;
+    padding:6px 12px;
+    cursor:pointer;
+    transition:all 0.2s ease, transform 0.15s ease;
+    white-space:nowrap;
+  }
+  .tabs button:hover{ transform:translateY(-1px); }
+  .tabs button:active{ transform:translateY(0) scale(0.95); }
+  .tabs button:hover, .tabs button.active{
+    background:var(--clay);
+    border-color:var(--clay);
+    color:#fff;
+  }
+  .tabs button.active{ box-shadow:0 2px 8px rgba(168,105,62,0.45); }
+
+  /* click zones to turn pages */
+  .clickzone{
+    position:absolute;
+    top:0; bottom:0;
+    width:8%;
+    z-index:5000;
+    cursor:pointer;
+  }
+  .clickzone.cz-left{ left:0; }
+  .clickzone.cz-right{ right:0; }
+
+  /* swipe hint shimmer, shown briefly on first load on touch devices */
+  .swipe-hint{
+    position:absolute;
+    left:0; right:0; bottom:8%;
+    display:flex;
+    justify-content:center;
+    pointer-events:none;
+    opacity:0;
+    z-index:45;
+  }
+  .swipe-hint span{
+    background:rgba(0,0,0,0.55);
+    color:#F1E7D4;
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    padding:7px 14px;
+    border-radius:999px;
+    backdrop-filter:blur(2px);
+  }
+  .swipe-hint.show{
+    animation:swipeHintFade 2.6s ease forwards;
+  }
+  @keyframes swipeHintFade{
+    0%{ opacity:0; transform:translateY(6px); }
+    15%{ opacity:1; transform:translateY(0); }
+    80%{ opacity:1; }
+    100%{ opacity:0; }
+  }
+
+  /* ===== Responsive: phones ===== */
+  @media (max-width:760px){
+    html,body{ height:100%; }
+    .stage{
+      height:100dvh;
+      /* fixed pixel reserves (not dvh-percentage) so the tab strip above and
+         the prev/next controls below always have guaranteed room, on every
+         phone height — previously this relied on the leftover gap from
+         centering an 88dvh book in a 100dvh stage, which shrinks on shorter
+         screens and ends up smaller than the fixed-height tabs/controls,
+         clipping them off the bottom of the screen */
+      padding-top:56px;
+      padding-bottom:calc(66px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .book{
+      width:100vw;
+      height:100%;
+      max-height:none;
+      perspective:1800px;
+    }
+
+    /* single full-width page on phones, no visible spine */
+    .spine{ opacity:0; width:0; }
+
+    .leaf{ width:100%; left:0 !important; transform-origin:left center; }
+    .leaf .face{ border-radius:8px; }
+    .leaf.right .face{ border-radius:8px; }
+
+    .spread{ border-radius:8px; }
+
+    .page-inner{ padding:24px 18px 18px; }
+    .page-head h2{ font-size:1.2rem; }
+    .page-head .amharic{ font-size:0.85rem; }
+    .menu-item .name .en{ font-size:0.86rem; }
+    .menu-item .name .am{ font-size:0.74rem; }
+    .menu-item{ padding:11px 2px; }
+    .cover-face h1{ font-size:1.8rem; }
+    .cover-face .amharic{ font-size:1.05rem; }
+
+    .page-num{ display:none; }
+
+    .tabs{
+      top:auto;
+      bottom:calc(100% + 8px);
+      left:0; right:0;
+      justify-content:flex-start;
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+      padding:0 14px;
+      mask-image:linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
+    }
+    .tabs::-webkit-scrollbar{ display:none; }
+    .tabs button{ flex-shrink:0; padding:7px 13px; font-size:0.66rem; }
+
+    .controls{
+      bottom:calc(-1 * (env(safe-area-inset-bottom, 0px) + 52px));
+      gap:22px;
+    }
+    .nav-btn{ width:48px; height:48px; font-size:1.25rem; }
+
+    /* on touch devices these full-height edge strips sat on top of the
+       scrollable menu list (z-index:5000) and swallowed the touch, so a
+       swipe-down that started near the left/right edge of the screen
+       never reached .menu-list and the page wouldn't scroll. Page turning
+       on phones already works fine via the swipe handler on the whole
+       book plus the prev/next buttons, so the tap zones are unneeded here
+       and we let touches pass through to whatever is underneath instead. */
+    .clickzone{ width:14%; pointer-events:none; }
+  }
+
+  @media (max-width:420px){
+    .cover-face h1{ font-size:1.55rem; }
+    .page-inner{ padding:20px 14px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .leaf, .book, .stage::before, .brandmark, .hint, .page-inner > *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="book" id="book">
+
+    <div class="tabs" id="tabs"></div>
+
+    <div class="spine"></div>
+    <div class="clickzone cz-left" id="czLeft" aria-label="Previous page"></div>
+    <div class="clickzone cz-right" id="czRight" aria-label="Next page"></div>
+
+    <!-- spreads injected here by JS -->
+    <div id="spreadHost"></div>
+
+    <div class="swipe-hint" id="swipeHint"><span>Swipe to turn pages</span></div>
+
+    <div class="controls">
+      <div class="nav-btn" id="prevBtn">&#8249;</div>
+      <div class="progress" id="progress">1 / 1</div>
+      <div class="nav-btn" id="nextBtn">&#8250;</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ---------- Data ---------- */
+const sections = [
+  {
+    id:'cover', tab:'Cover', kind:'cover'
+  },
+  {
+    id:'contents', tab:'Contents', kind:'contents'
+  },
+  {
+    id:'breakfast', tab:'Breakfast', en:'Breakfast', am:'ቁርስ',
+    blurb:'Eggs, fool and fetira, made the way mornings in Addis call for.',
+    items:[
+      ['Scrambled egg','እንቁላል ፍርፍር',220],
+      ['Scrambled egg with meat','እንቁላል ፍርፍር በስጋ',320],
+      ['Egg sauce','እንቁላል ስልስ',270],
+      ['Fool','ፉል',170],
+      ['Fool with tuna','ፉል በ ቱና',250],
+      ['Special fool','እስፔሻል ፉል',220],
+      ['Chechebesa','ጨጨብሳ',200],
+      ['Special chechebesa','እስፔሻል ጨጨብሳ',270],
+      ['Special sandwich','እስፔሻል ሳንድዊች',400],
+      ['Egg sandwich','እንቁላል ሳንድዊች',270],
+      ['Tuna sandwich','ቱና ሳንድዊች',350],
+      ['Chicken sandwich','ቺክን ሳንድዊች',450],
+      ['Veggie sandwich','አትክልት ሳንድዊች',300],
+      ['Club sandwich','ክለብ ሳንድዊች',500],
+      ['Waffle','ዋፍል',300],
+      ['French toast','ፍሬንች ቶስት',300],
+      ['Kinche','ቅንጭ',300],
+      ['Fasting fetira','የፆም ፈጢራ',350],
+      ['Fetira with egg','ፈጢራ በ እንቁላል',350],
+      ['Special fetira','እስፔሻል ፈጢራ',420],
+    ]
+  },
+  {
+    id:'lunch', tab:'Lunch', en:'Lunch', am:'ምሳ',
+    blurb:'Shiro, tegabino, pasta and firfir. The plates people come back for.',
+    items:[
+      ['Bozena shiro','ቦዘና ሽሮ',350],
+      ['Shiro','ሽሮ',200],
+      ['Shiro with butter','ሽሮ በቅቤ',230],
+      ['Tegabino','ተጋቢኖ',280],
+      ['Pasta with sauce','ፓስታ በስጎ',250],
+      ['Pasta with meat','ፓስታ በስጋ',350],
+      ['Pasta with vegetable','ፓስታ በአትክልት',300],
+      ['Pasta with egg','ፓስታ በ እንቁላል',300],
+      ['Tmatim lebeleb','ቲማቲም ለብለብ',180],
+      ['Tmatim sils','ቲማቲም ስልስ',200],
+      ['Firfir','ፍርፍር',200],
+      ['Firfir with egg','ፍርፍር በእንቁላል',250],
+      ['Tibs firfir','ጥብስ ፍርፍር',350],
+      ['Sega firfir','ስጋ ፍርፍር',320],
+      ['Quanta firfir','ቐንጣ ፍርፍር',420],
+      ['Tibs','ጥብስ',450],
+      ['Dulet','ዱለት',350],
+    ]
+  },
+  {
+    id:'burgers', tab:'Burgers & wraps', en:'Burgers and wraps', am:'በርገር እና ሸዋርማ',
+    blurb:'For when you want something familiar, made well.',
+    groups:[
+      {h:'Burgers / በርገር', items:[
+        ['Special burger','እስፔሻል በርገር',600],
+        ['Double burger','ደብል በርገር',550],
+        ['Beef burger','ቢፍ በርገር',450],
+        ['Chicken burger','ቺክን በርገር',600],
+        ['Cheesy burger','ቺዝ በርገር',500],
+      ]},
+      {h:'Wraps / ሸዋርማ', items:[
+        ['Beef wrap','ቢፍ ሸዋርማ',400],
+        ['Chicken wrap','ቺክን ሸዋርማ',500],
+        ['Tuna wrap','ቱና ሸዋርማ',480],
+        ['Veggie wrap','አትክልት ሸዋርማ',300],
+        ['Special wrap','እስፔሻል ሸዋርማ',500],
+      ]}
+    ]
+  },
+  {
+    id:'pizza', tab:'Pizza', en:'Pizza', am:'ፒዛ',
+    blurb:'Baked fresh, sliced and ready for the table.',
+    items:[
+      ['Special pizza','እስፔሻል ፒዛ',600],
+      ['4 saisons pizza','4 ሲዝን ፒዛ',700],
+      ['Margherita pizza','ማርጋሪታ ፒዛ',500],
+      ['Beef pizza','ቢፍ ፒዛ',550],
+      ['Tuna pizza','ቱና ፒዛ',580],
+      ['Veggie pizza','አትክልት ፒዛ',450],
+    ]
+  },
+  {
+    id:'snacks', tab:'Snacks & extras', en:'Snacks and extras', am:'መክሰስ እና ጭማሪ',
+    blurb:'Small plates and add ons, for whenever you want a little more.',
+    groups:[
+      {h:'Snacks / መክሰስ', items:[
+        ['Sambusa','ሳምቡሳ',45],
+        ['Ertibe with pita','እርጥብ በቂጣ',200],
+        ['Special ertibe with pita','እስፔሻል እርጥብ በቂጣ',250],
+        ['French fries','ቺብስ',200],
+      ]},
+      {h:'Extras / ጭማሪ', items:[
+        ['Tuna extra','ቱና',100],
+        ['Egg extra','እንቁላል',50],
+        ['Ketchup','ካቻፕ',25],
+        ['Mayonnaise','ማዮኒዝ',50],
+        ['Honey','ማር',25],
+        ['Aluminium foil','አልሙኒም ፎይል',20],
+        ['Yoghurt','እርጎ',20],
+        ['Chilli','ዳጣ',20],
+        ['Syrup','ሲራፕ',25],
+        ['Bread','ዳቦ',20],
+        ['Burger takeaway box','የበርገር ቴካዌ ቦክስ',30],
+        ['Large takeaway cup','ቴካዌ ካፕ ትልቁ',25],
+        ['Coffee takeaway cup','ቴካዌ ካፕ የቡና',15],
+        ['Aluminium takeaway box','አልሙኒየም ቴካዌ ቦክስ',55],
+      ]}
+    ]
+  },
+  {
+    id:'coffee', tab:'Tea & coffee', en:'Tea and coffee', am:'ሻይ እና ቡና',
+    blurb:'This is what we are named for. Brewed slow, served warm.',
+    items:[
+      ['Coffee','ቡና',50],
+      ['Espresso','እስፕሬሶ',70],
+      ['Macchiato','ማኪያቶ',90],
+      ['Steamed milk with coffee','እስቲም ወተት በቡና',115],
+      ['Espresso shot','እስፕሪስ',50],
+      ['Milk','ወተት',95],
+      ['Black tea','ጥቁር ሻይ',40],
+      ['Lemon tea','ሻይ በሎሚ',50],
+      ['Cinnamon tea','ሻይ በቅመም',45],
+      ['Keshir','ቀሽር',50],
+      ['Hibiscus tea','ከርከዴ ሻይ',75],
+    ]
+  },
+  {
+    id:'cold', tab:'Cold drinks', en:'Cold drinks', am:'ቀዝቃዛ መጠጦች',
+    blurb:'Iced coffee and hibiscus, for warm afternoons.',
+    items:[
+      ['Iced coffee','አይስ ኮፊ',150],
+      ['Caramel iced coffee','ካራሜል አይስ ኮፊ',150],
+      ['Iced chocolate latte','አይስ ቸኮላት ላቴ',200],
+      ['Iced hibiscus tea','አይስ ከርከዴ',180],
+    ]
+  },
+  {
+    id:'yoghurt', tab:'Yoghurt & soft drinks', en:'Yoghurt and soft drinks', am:'እርጎ እና ለስላሳ መጠጦች',
+    blurb:'A lighter option, and the usual bottled favourites.',
+    groups:[
+      {h:'Yoghurt / እርጎ', items:[
+        ['Yoghurt with honey','እርጎ በ ማር',150],
+        ['Yoghurt with red chilli','እርጎ በ ሚጥሚጣ',110],
+        ['Flax','ተልባ',130],
+        ['Flax mix with seasonal fruits','ተልባ በወተት',200],
+      ]},
+      {h:'Soft drinks / ለስላሳ መጠጦች', items:[
+        ['Novida','ኖቪዳ',60],
+        ['Ambo water','አምቦውሃ',60],
+        ['Fanta','ፋንታ',60],
+        ['Sprite','ስፕራይት',60],
+        ['Negus','ንጉስ',90],
+        ['Water, half litre','ውሃ 1/2',40],
+        ['Water, 1 litre','ውሃ 1L',50],
+        ['Water, 2 litre','ውሃ 2L',60],
+      ]}
+    ]
+  },
+  {
+    id:'juices', tab:'Juices & mojito', en:'Fresh juices and mojito', am:'ፍሬሽ ጁስ እና ሞጂቶ',
+    blurb:'Pressed fruit and mint, for a clean finish to any meal.',
+    groups:[
+      {h:'Fresh juices / ፍሬሽ ጁስ', items:[
+        ['Mixed fruit','ሚክስድ',250],
+        ['Mango','ማንጎ',220],
+        ['Papaya','ፓፓያ',200],
+        ['Avocado','አቮካዶ',220],
+      ]},
+      {h:'Mojito / ሞጂቶ', items:[
+        ['Strawberry','እስትሮቨሪ',250],
+        ['Orange','ኦሬንጅ',250],
+        ['Mango','ማንጎ',250],
+        ['Mint','ሜንት',250],
+        ['Apple','አፕል',250],
+        ['Tropical blue','ትሮፒካል ብሉ',250],
+        ['Mango and coconut','ማንጎ እና ኮኮናት',250],
+        ['J Nat special','ጄ ናት እስፔሻል',250],
+      ]}
+    ]
+  },
+  {
+    id:'back', tab:'Closing', kind:'back'
+  }
+];
+
+/* ---------- Build page HTML ---------- */
+function renderMenuBody(section){
+  let html = '';
+  if(section.blurb){
+    html += `<p class="blurb">${section.blurb}</p>`;
+  }
+  if(section.items){
+    html += '<div class="menu-list">';
+    section.items.forEach(([en,am,price])=>{
+      html += `<div class="menu-item"><div class="name"><span class="en">${en}</span><span class="am">${am}</span></div><div class="price">${price}</div></div>`;
+    });
+    html += '</div>';
+  } else if (section.groups){
+    html += '<div class="menu-list">';
+    section.groups.forEach(g=>{
+      html += `<div class="subhead">${g.h}</div>`;
+      g.items.forEach(([en,am,price])=>{
+        html += `<div class="menu-item"><div class="name"><span class="en">${en}</span><span class="am">${am}</span></div><div class="price">${price}</div></div>`;
+      });
+    });
+    html += '</div>';
+  }
+  return html;
+}
+
+function buildPageContent(section){
+  if(section.kind === 'cover'){
+    return `<div class="page-inner cover-face">
+      <div class="brandmark"><svg viewBox="0 0 100 100"><path d="M24 38 L70 38 L66 72 Q66 80 50 80 Q34 80 30 72 Z"/><path d="M70 42 Q86 42 86 54 Q86 64 70 64"/></svg></div>
+      <h1>J Nat Coffee</h1>
+      <div class="amharic">ጄ ናት ቡና</div>
+      <div class="tag">Koye &middot; Est. menu</div>
+      <div class="hint">Tap or swipe to begin</div>
+    </div>`;
+  }
+  if(section.kind === 'back'){
+    return `<div class="page-inner back-face">
+      <h2 style="color:var(--cream); margin-bottom:10px;">Thank you for coming</h2>
+      <div class="hours">Open daily, 8 AM to 9 PM &middot; Addis Ababa</div>
+      <div style="display:flex; flex-direction:column; gap:8px; color:#D8C9AE; font-size:0.8rem; margin-bottom:22px;">
+        <div>CBE &middot; 1000641332837</div>
+        <div>BOA &middot; 200756002</div>
+        <div>Telebirr &middot; 0908488848</div>
+      </div>
+      <div class="made-by">Made by <a href="https://emberstudios.vercel.app/" target="_blank" rel="noopener">Ember Studios</a></div>
+    </div>`;
+  }
+  if(section.kind === 'contents'){
+    let rows = sections
+      .filter(s=>!['cover','contents','back','payments'].includes(s.kind))
+      .map((s,i)=>`<li><span>${s.en}</span><span class="no">${String(i+1).padStart(2,'0')}</span></li>`).join('');
+    return `<div class="page-inner">
+      <div class="page-head"><h2>Contents</h2><span class="amharic">ማውጫ</span></div>
+      <ul class="contents-list">${rows}</ul>
+    </div>`;
+  }
+  return `<div class="page-inner">
+    <div class="page-head"><h2>${section.en}</h2><span class="amharic">${section.am}</span></div>
+    ${renderMenuBody(section)}
+  </div>`;
+}
+
+const pages = sections.map(s => ({ id:s.id, html: buildPageContent(s) }));
+const totalPages = pages.length;
+
+/* ---------- Responsive pagination -----------
+   Desktop / tablet: two pages per leaf (a real book spread).
+   Phones: one page per leaf, full width, so each page is easy to read. */
+function isPhone(){ return window.matchMedia('(max-width:760px)').matches; }
+
+let perLeaf = isPhone() ? 1 : 2;
+let leafCount = perLeaf === 2 ? Math.ceil(totalPages/2) : totalPages;
+let current = 0; // number of leaves flipped
+let leafEls = [];
+
+const spreadHost = document.getElementById('spreadHost');
+
+function buildLeaves(){
+  perLeaf = isPhone() ? 1 : 2;
+  leafCount = perLeaf === 2 ? Math.ceil(totalPages/2) : totalPages;
+
+  let leavesHtml = '';
+  for(let k=0;k<leafCount;k++){
+    const frontIdx = perLeaf === 2 ? k*2 : k;
+    const backIdx  = perLeaf === 2 ? k*2+1 : Math.min(k+1, totalPages-1);
+    const frontHtml = pages[frontIdx] ? pages[frontIdx].html : `<div class="page-inner cover-face"></div>`;
+    const backHtml = pages[backIdx] ? pages[backIdx].html : `<div class="page-inner cover-face"></div>`;
+    leavesHtml += `
+      <div class="leaf right" data-leaf="${k}" style="z-index:${(leafCount-k)*10+5}">
+        <div class="face front">${frontHtml}<div class="page-num">${frontIdx+1}</div></div>
+        <div class="face back">${backHtml}<div class="page-num">${backIdx+1 <= totalPages ? backIdx+1 : ''}</div></div>
+      </div>`;
+  }
+  spreadHost.innerHTML = `<div class="spread">${leavesHtml}</div>`;
+  leafEls = Array.from(document.querySelectorAll('.leaf'));
+}
+
+function applyState(){
+  leafEls.forEach((leaf, idx)=>{
+    if(idx < current){
+      leaf.classList.add('flip-right');
+      leaf.style.zIndex = idx * 10 + 1;
+    } else {
+      leaf.classList.remove('flip-right');
+      leaf.style.zIndex = (leafCount - idx) * 10 + 5;
+    }
+  });
+  document.getElementById('prevBtn').classList.toggle('disabled', current<=0);
+  document.getElementById('nextBtn').classList.toggle('disabled', current>=leafCount);
+
+  const rightPageVisible = perLeaf === 2 ? current*2 + 1 : current + 1;
+  document.getElementById('progress').textContent = `${Math.min(rightPageVisible, totalPages)} / ${totalPages}`;
+
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+  const activeSectionIdx = perLeaf === 2 ? Math.min(current*2, totalPages-1) : Math.min(current, totalPages-1);
+  const activeId = pages[activeSectionIdx] ? pages[activeSectionIdx].id : null;
+  const tabBtn = document.querySelector(`.tabs button[data-id="${activeId}"]`);
+  if(tabBtn){
+    tabBtn.classList.add('active');
+    centerTabInStrip(tabBtn);
+  }
+}
+
+function centerTabInStrip(btn){
+  const strip = tabsHost;
+  if(!strip || strip.scrollWidth <= strip.clientWidth) return; // nothing to scroll, leave it alone
+  const target = btn.offsetLeft - (strip.clientWidth/2) + (btn.clientWidth/2);
+  const max = strip.scrollWidth - strip.clientWidth;
+  strip.scrollTo({ left: Math.max(0, Math.min(target, max)), behavior:'smooth' });
+}
+
+function flagTurning(leaf){
+  leaf.classList.add('turning');
+  setTimeout(()=> leaf.classList.remove('turning'), 900);
+}
+
+function getFlipMs(){
+  const sample = document.querySelector('.leaf');
+  if(!sample) return 860;
+  const dur = getComputedStyle(sample).transitionDuration.split(',')[0].trim();
+  const ms = dur.endsWith('ms') ? parseFloat(dur) : parseFloat(dur) * 1000;
+  return (isFinite(ms) && ms > 0) ? ms + 10 : 860; // +10ms safety margin
+}
+
+function next(){
+  if(current < leafCount){
+    const idx = current;
+    const leaf = leafEls[idx];
+    flagTurning(leaf);
+    current++;
+    applyState();
+    // pin this leaf above the whole stack for the duration of its own flip,
+    // then let it settle to its resting (flipped) z-index — without this,
+    // applyState's immediate z-index reassignment makes the leaf duck behind
+    // neighboring pages partway through the rotation, and how far depends on
+    // the stack gap at that particular page index, which is why it looked
+    // inconsistent from page to page.
+    leaf.style.zIndex = 9999;
+    clearTimeout(leaf._zTimer);
+    leaf._zTimer = setTimeout(()=>{ leaf.style.zIndex = idx * 10 + 1; }, getFlipMs());
+  }
+}
+function prev(){
+  if(current > 0){
+    current--;
+    const idx = current;
+    const leaf = leafEls[idx];
+    flagTurning(leaf);
+    applyState();
+    leaf.style.zIndex = 9999;
+    clearTimeout(leaf._zTimer);
+    leaf._zTimer = setTimeout(()=>{ leaf.style.zIndex = (leafCount - idx) * 10 + 5; }, getFlipMs());
+  }
+}
+
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('czRight').addEventListener('click', next);
+document.getElementById('czLeft').addEventListener('click', prev);
+
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'ArrowRight') next();
+  if(e.key === 'ArrowLeft') prev();
+});
+
+/* ---------- Touch swipe support (essential on phones) ---------- */
+let touchStartX = null;
+let touchStartY = null;
+const bookEl = document.getElementById('book');
+
+bookEl.addEventListener('touchstart', (e)=>{
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive:true });
+
+bookEl.addEventListener('touchend', (e)=>{
+  if(touchStartX === null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)*1.5){
+    if(dx < 0) next(); else prev();
+  }
+  touchStartX = null; touchStartY = null;
+}, { passive:true });
+
+/* ---------- Tabs ---------- */
+const tabsHost = document.getElementById('tabs');
+sections.forEach((s, i)=>{
+  if(s.kind === 'back' || s.kind === 'payments') return;
+  const btn = document.createElement('button');
+  btn.textContent = s.tab;
+  btn.dataset.id = s.id;
+  btn.addEventListener('click', ()=>{
+    const pageIdx = i;
+    if(perLeaf === 2){
+      current = pageIdx % 2 === 0 ? pageIdx/2 : Math.ceil(pageIdx/2);
+    } else {
+      current = pageIdx;
+    }
+    leafEls.forEach(leaf=>{ clearTimeout(leaf._zTimer); leaf.style.zIndex = ''; });
+    applyState();
+  });
+  tabsHost.appendChild(btn);
+});
+
+/* ---------- Init + responsive rebuild ---------- */
+function rebuildPreservingPosition(){
+  // figure out which page index is currently "active" before rebuilding
+  const activePage = perLeaf === 2 ? Math.min(current*2, totalPages-1) : Math.min(current, totalPages-1);
+  buildLeaves();
+  current = perLeaf === 2 ? Math.floor(activePage/2) : activePage;
+  applyState();
+}
+
+let resizeTimer = null;
+window.addEventListener('resize', ()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(()=>{
+    const wantPhone = isPhone();
+    if((wantPhone && perLeaf !== 1) || (!wantPhone && perLeaf !== 2)){
+      rebuildPreservingPosition();
+    }
+  }, 200);
+});
+
+buildLeaves();
+applyState();
+
+/* brief swipe hint for first-time touch users */
+if(isPhone() && 'ontouchstart' in window){
+  setTimeout(()=>{
+    const hint = document.getElementById('swipeHint');
+    hint.classList.add('show');
+  }, 1200);
+}
+</script>
+</body>
+</html>
+
