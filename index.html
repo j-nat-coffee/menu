@@ -858,7 +858,7 @@ setTimeout(() => {
   dismissSplash();
 }, 2800);
 
-/* Menu Database with User's Custom Food Photos */
+/* Menu Database - Strict 1-to-1 Exact Filename Mapping */
 const menuData = [
   {
     category: "coffee",
@@ -893,12 +893,12 @@ const menuData = [
       { id: "b6", en: "Special fool", am: "እስፔሻል ፉል", price: 220, badge: "Chef's Special", desc: "Rich fava bean dish topped with boiled egg, butter, yogurt and tomatoes.", img: "images/special fool.jpg" },
       { id: "b7", en: "Chechebesa", am: "ጨጨብሳ", price: 200, badge: "Popular", desc: "Shredded flatbread cooked in spiced niter kibbeh butter and berbere.", img: "images/Chechebesa.jpg" },
       { id: "b8", en: "Special chechebesa", am: "እስፔሻል ጨጨብሳ", price: 270, badge: "Chef's Special", desc: "Chechebesa enriched with honey and fried egg on top.", img: "images/special chechebesa.jpg" },
-      { id: "b9", en: "Special sandwich", am: "እስፔሻል ሳንድዊች", price: 400, desc: "Double layer crusty loaf filled with cheese, meat, egg and veggies.", img: "images/egg sandwitch.jpg" },
+      { id: "b9", en: "Special sandwich", am: "እስፔሻል ሳንድዊች", price: 400, desc: "Double layer crusty loaf filled with cheese, meat, egg and veggies.", img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80" },
       { id: "b10", en: "Egg sandwich", am: "እንቁላል ሳንድዊች", price: 270, desc: "Fresh bread stuffed with seasoned fried eggs and crisp tomatoes.", img: "images/egg sandwitch.jpg" },
-      { id: "b11", en: "Tuna sandwich", am: "ቱና ሳንድዊች", price: 350, desc: "Seasoned tuna salad filling with fresh lettuce and mayo.", img: "images/veggie sandwitch.jpg" },
-      { id: "b12", en: "Chicken sandwich", am: "ቺክን ሳንድዊች", price: 450, desc: "Grilled chicken fillet on artisan bread with light sauce.", img: "images/veggie sandwitch.jpg" },
+      { id: "b11", en: "Tuna sandwich", am: "ቱና ሳንድዊች", price: 350, desc: "Seasoned tuna salad filling with fresh lettuce and mayo.", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" },
+      { id: "b12", en: "Chicken sandwich", am: "ቺክን ሳንድዊች", price: 450, desc: "Grilled chicken fillet on artisan bread with light sauce.", img: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=600&q=80" },
       { id: "b13", en: "Veggie sandwich", am: "አትክልት ሳንድዊች", price: 300, badge: "Fasting", desc: "Fresh avocado, tomatoes, cucumber and lettuce in oven bread.", img: "images/veggie sandwitch.jpg" },
-      { id: "b14", en: "Club sandwich", am: "ክለብ ሳንድዊች", price: 500, desc: "Triple decker toasted sandwich served with French fries.", img: "images/veggie sandwitch.jpg" },
+      { id: "b14", en: "Club sandwich", am: "ክለብ ሳንድዊች", price: 500, desc: "Triple decker toasted sandwich served with French fries.", img: "https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=600&q=80" },
       { id: "b15", en: "Waffle", am: "ዋፍል", price: 300, desc: "Golden crispy Belgian waffle served warm with syrup or honey.", img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=600&q=80" },
       { id: "b16", en: "French toast", am: "ፍሬንች ቶስት", price: 300, desc: "Pan-fried egg-soaked thick brioche toast sprinkled with sweet cinnamon.", img: "images/french toast.jpg" },
       { id: "b17", en: "Kinche", am: "ቅንጭ", price: 300, desc: "Cracked wheat cereal cooked in spiced butter or oil.", img: "images/kinche.jpg" },
@@ -918,7 +918,7 @@ const menuData = [
       { id: "l3", en: "Shiro with butter", am: "ሽሮ በቅቤ", price: 230, desc: "Aromatic chickpea stew finished with spiced niter kibbeh butter.", img: "images/shiro with butter.jpg" },
       { id: "l4", en: "Tegabino", am: "ተጋቢኖ", price: 280, badge: "Chef's Special", desc: "Thick spiced shiro served boiling hot in a clay pot.", img: "images/tegabino.jpg" },
       { id: "l5", en: "Pasta with sauce", am: "ፓስታ በስጎ", price: 250, badge: "Fasting", desc: "Italian spaghetti tossed in rich tomato garlic herb marinara.", img: "images/pasta with sauce.jpg" },
-      { id: "l6", en: "Pasta with meat", am: "ፓስታ በስጋ", price: 350, desc: "Spaghetti served with savory minced meat bolognaise sauce.", img: "images/pasta with egg.jpg" },
+      { id: "l6", en: "Pasta with meat", am: "ፓስታ በስጋ", price: 350, desc: "Spaghetti served with savory minced meat bolognaise sauce.", img: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80" },
       { id: "l7", en: "Pasta with vegetable", am: "ፓስታ በአትክልት", price: 300, badge: "Fasting", desc: "Spaghetti sautéed with fresh carrots, zucchini and sweet peppers.", img: "images/pasta with vegetable.jpg" },
       { id: "l8", en: "Pasta with egg", am: "ፓስታ በ እንቁላል", price: 300, desc: "Warm pasta served with fried egg toppings.", img: "images/pasta with egg.jpg" },
       { id: "l9", en: "Tmatim lebeleb", am: "ቲማቲም ለብለብ", price: 180, badge: "Fasting", desc: "Sautéed fresh tomato salad with jalapenos and onions.", img: "images/tmatim lebeleb.jpg" },
@@ -938,13 +938,13 @@ const menuData = [
     catAm: "በርገር እና ሸዋርማ",
     icon: "🍔",
     items: [
-      { id: "u1", en: "Special burger", am: "እስፔሻል በርገር", price: 600, badge: "Chef's Special", desc: "Juicy beef patty topped with melted cheese, fried egg, lettuce and house sauce.", img: "images/cheesy burger.jpg" },
-      { id: "u2", en: "Double burger", am: "ደብል በርገር", price: 550, desc: "Two thick grilled beef patties layered with melted cheddar cheese.", img: "images/cheesy burger.jpg" },
+      { id: "u1", en: "Special burger", am: "እስፔሻል በርገር", price: 600, badge: "Chef's Special", desc: "Juicy beef patty topped with melted cheese, fried egg, lettuce and house sauce.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
+      { id: "u2", en: "Double burger", am: "ደብል በርገር", price: 550, desc: "Two thick grilled beef patties layered with melted cheddar cheese.", img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" },
       { id: "u3", en: "Beef burger", am: "ቢፍ በርገር", price: 450, badge: "Popular", desc: "Grilled beef patty with onions, pickles, tomato and soft burger bun.", img: "images/beef burger.jpg" },
-      { id: "u4", en: "Chicken burger", am: "ቺክን በርገር", price: 600, desc: "Crispy fried or grilled chicken breast fillet with mayo lettuce.", img: "images/beef burger.jpg" },
+      { id: "u4", en: "Chicken burger", am: "ቺክን በርገር", price: 600, desc: "Crispy fried or grilled chicken breast fillet with mayo lettuce.", img: "https://images.unsplash.com/photo-1615297928064-24977384d0da?auto=format&fit=crop&w=600&q=80" },
       { id: "u5", en: "Cheesy burger", am: "ቺዝ በርገር", price: 500, desc: "Beef patty smothered with extra melted cheese slices.", img: "images/cheesy burger.jpg" },
       { id: "u6", en: "Beef wrap", am: "ቢፍ ሸዋርማ", price: 400, desc: "Seasoned grilled beef strips wrapped tightly in warm pita flatbread.", img: "images/beef wrap.jpg" },
-      { id: "u7", en: "Chicken wrap", am: "ቺክን ሸዋርማ", price: 500, desc: "Sliced garlic roasted chicken wrapped with veggies and cream sauce.", img: "images/beef wrap.jpg" },
+      { id: "u7", en: "Chicken wrap", am: "ቺክን ሸዋርማ", price: 500, desc: "Sliced garlic roasted chicken wrapped with veggies and cream sauce.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" },
       { id: "u8", en: "Tuna wrap", am: "ቱና ሸዋርማ", price: 480, desc: "Seasoned tuna flakes with crunchy lettuce wrapped in flat bread.", img: "images/tuna wrap.jpg" },
       { id: "u9", en: "Veggie wrap", am: "አትክልት ሸዋርማ", price: 300, badge: "Fasting", desc: "Fresh avocado, grilled veggies and garlic spread wrapped in pita.", img: "images/veggie wrap.jpg" },
       { id: "u10", en: "Special wrap", am: "እስፔሻል ሸዋርማ", price: 500, desc: "Meat, cheese and house sauce wrapped in grilled tortilla.", img: "images/special wrap.jpg" }
