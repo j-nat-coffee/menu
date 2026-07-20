@@ -280,7 +280,7 @@
   .card-img-wrap {
     position: relative;
     width: 100%;
-    padding-top: 70%; /* 10:7 aspect ratio */
+    padding-top: 75%; /* Aspect ratio */
     background: #18110B;
     overflow: hidden;
   }
@@ -290,12 +290,14 @@
     top: 0; left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* Guarantees 100% of dish is visible without cropping! */
+    object-position: center center;
+    background: #18110B;
     transition: transform 0.4s ease;
   }
 
   .card:hover .card-img {
-    transform: scale(1.06);
+    transform: scale(1.04);
   }
 
   .card-badge {
@@ -312,6 +314,7 @@
     border-radius: 99px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    z-index: 5;
   }
 
   .card-body {
@@ -498,8 +501,8 @@
     top: 16px; right: 16px;
     width: 34px; height: 34px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    border: none;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--line);
     color: var(--text-primary);
     font-size: 1.2rem;
     cursor: pointer;
@@ -507,12 +510,22 @@
     display: flex; align-items: center; justify-content: center;
   }
 
+  .modal-img-container {
+    width: 100%;
+    height: 240px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    background: #18110B;
+    position: relative;
+    border: 1px solid var(--line-soft);
+  }
+
   .modal-img {
     width: 100%;
-    height: 220px;
-    border-radius: 16px;
-    object-fit: cover;
-    margin-bottom: 16px;
+    height: 100%;
+    object-fit: contain; /* Ensures 100% of full cup/plate is shown with ZERO cropping! */
+    object-position: center center;
   }
 
   .modal-title { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); }
@@ -678,7 +691,9 @@
   <div class="modal-overlay" id="detailModal">
     <div class="modal-sheet">
       <button class="modal-close" onclick="closeModal('detailModal')">&times;</button>
-      <img src="" id="modalImg" class="modal-img" alt="Item Image">
+      <div class="modal-img-container">
+        <img src="" id="modalImg" class="modal-img" alt="Item Image">
+      </div>
       <div class="modal-title" id="modalTitle"></div>
       <div class="modal-amharic amharic" id="modalAmharic"></div>
       <div class="modal-desc" id="modalDesc"></div>
@@ -714,7 +729,7 @@
   </div>
 
 <script>
-/* Menu Database with curated imagery & details */
+/* Menu Database with custom user uploaded photos */
 const menuData = [
   {
     category: "coffee",
@@ -722,9 +737,9 @@ const menuData = [
     catAm: "ሻይ እና ቡና",
     icon: "☕",
     items: [
-      { id: "c1", en: "Coffee", am: "ቡና", price: 50, badge: "Signature", desc: "Freshly roasted Ethiopian highlands coffee brewed slow in traditional style.", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" },
+      { id: "c1", en: "Coffee", am: "ቡና", price: 50, badge: "Signature", desc: "Freshly roasted Ethiopian highlands coffee brewed slow in traditional jebena style.", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" },
       { id: "c2", en: "Espresso", am: "እስፕሬሶ", price: 70, desc: "Rich and intense shot of pure concentrated dark roast coffee.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" },
-      { id: "c3", en: "Macchiato", am: "ማኪያቶ", price: 90, badge: "Popular", desc: "Espresso layered with velvety steamed milk foam.", img: "https://images.unsplash.com/photo-1557772611-722dabe20327?auto=format&fit=crop&w=600&q=80" },
+      { id: "c3", en: "Macchiato", am: "ማኪያቶ", price: 90, badge: "Popular", desc: "Espresso layered with velvety steamed milk foam.", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80" },
       { id: "c4", en: "Steamed milk with coffee", am: "እስቲም ወተት በቡና", price: 115, desc: "Warm steamed milk gently infused with aromatic coffee.", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80" },
       { id: "c5", en: "Espresso shot", am: "እስፕሪስ", price: 50, desc: "Extra energizing single espresso shot.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" },
       { id: "c6", en: "Milk", am: "ወተት", price: 95, desc: "Fresh steamed whole milk.", img: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80" },
@@ -741,8 +756,8 @@ const menuData = [
     catAm: "ቁርስ",
     icon: "🍳",
     items: [
-      { id: "b1", en: "Scrambled egg", am: "እንቁላል ፍርፍር", price: 220, desc: "Fluffy scrambled eggs prepared with onions, tomatoes and green chillies.", img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80" },
-      { id: "b2", en: "Scrambled egg with meat", am: "እንቁላል ፍርፍር በስጋ", price: 320, badge: "Popular", desc: "Savory scrambled eggs sautéed with tender minced beef strips.", img: "https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=600&q=80" },
+      { id: "b1", en: "Scrambled egg", am: "እንቁላል ፍርፍር", price: 220, desc: "Fluffy scrambled eggs prepared with onions, tomatoes and green chillies served with warm toast.", img: "images/scrambled_egg.jpg" },
+      { id: "b2", en: "Scrambled egg with meat", am: "እንቁላል ፍርፍር በስጋ", price: 320, badge: "Popular", desc: "Savory scrambled eggs sautéed with tender seasoned meat strips.", img: "images/scrambled_egg_with_meat.jpg" },
       { id: "b3", en: "Egg sauce", am: "እንቁላል ስልስ", price: 270, desc: "Poached eggs simmered in rich spiced tomato-onion stew.", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=600&q=80" },
       { id: "b4", en: "Fool", am: "ፉል", price: 170, desc: "Warm crushed fava beans seasoned with berbere, oil and herbs.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
       { id: "b5", en: "Fool with tuna", am: "ፉል በ ቱና", price: 250, desc: "Traditional fava bean dish topped with seasoned tuna chunks.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
