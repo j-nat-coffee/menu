@@ -252,7 +252,7 @@
     }
   }
 
-  /* Card Component */
+  /* Card Component - Rich Edge-to-Edge Cover */
   .card {
     background: var(--bg-card);
     border: 1px solid var(--line-soft);
@@ -280,24 +280,21 @@
   .card-img-wrap {
     position: relative;
     width: 100%;
-    padding-top: 75%; /* Aspect ratio */
+    height: 140px; /* Fixed height for clean, edge-to-edge card cover */
     background: #18110B;
     overflow: hidden;
   }
 
   .card-img {
-    position: absolute;
-    top: 0; left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Guarantees 100% of dish is visible without cropping! */
+    object-fit: cover; /* Fills card completely edge-to-edge! */
     object-position: center center;
-    background: #18110B;
     transition: transform 0.4s ease;
   }
 
   .card:hover .card-img {
-    transform: scale(1.04);
+    transform: scale(1.06);
   }
 
   .card-badge {
@@ -524,7 +521,7 @@
   .modal-img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Ensures 100% of full cup/plate is shown with ZERO cropping! */
+    object-fit: cover; /* Fills modal richly edge-to-edge! */
     object-position: center center;
   }
 
@@ -729,7 +726,7 @@
   </div>
 
 <script>
-/* Menu Database with custom user uploaded photos */
+/* Menu Database with rich edge-to-edge food photos */
 const menuData = [
   {
     category: "coffee",
@@ -739,7 +736,7 @@ const menuData = [
     items: [
       { id: "c1", en: "Coffee", am: "ቡና", price: 50, badge: "Signature", desc: "Freshly roasted Ethiopian highlands coffee brewed slow in traditional jebena style.", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" },
       { id: "c2", en: "Espresso", am: "እስፕሬሶ", price: 70, desc: "Rich and intense shot of pure concentrated dark roast coffee.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" },
-      { id: "c3", en: "Macchiato", am: "ማኪያቶ", price: 90, badge: "Popular", desc: "Espresso layered with velvety steamed milk foam.", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80" },
+      { id: "c3", en: "Macchiato", am: "ማኪያቶ", price: 90, badge: "Popular", desc: "Espresso layered with velvety steamed milk foam.", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80", imgPos: "center center" },
       { id: "c4", en: "Steamed milk with coffee", am: "እስቲም ወተት በቡና", price: 115, desc: "Warm steamed milk gently infused with aromatic coffee.", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80" },
       { id: "c5", en: "Espresso shot", am: "እስፕሪስ", price: 50, desc: "Extra energizing single espresso shot.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" },
       { id: "c6", en: "Milk", am: "ወተት", price: 95, desc: "Fresh steamed whole milk.", img: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80" },
@@ -756,8 +753,8 @@ const menuData = [
     catAm: "ቁርስ",
     icon: "🍳",
     items: [
-      { id: "b1", en: "Scrambled egg", am: "እንቁላል ፍርፍር", price: 220, desc: "Fluffy scrambled eggs prepared with onions, tomatoes and green chillies served with warm toast.", img: "images/scrambled_egg.jpg" },
-      { id: "b2", en: "Scrambled egg with meat", am: "እንቁላል ፍርፍር በስጋ", price: 320, badge: "Popular", desc: "Savory scrambled eggs sautéed with tender seasoned meat strips.", img: "images/scrambled_egg_with_meat.jpg" },
+      { id: "b1", en: "Scrambled egg", am: "እንቁላል ፍርፍር", price: 220, desc: "Fluffy scrambled eggs prepared with onions, tomatoes and green chillies served with warm toast.", img: "images/scrambled_egg.jpg", imgPos: "center center" },
+      { id: "b2", en: "Scrambled egg with meat", am: "እንቁላል ፍርፍር በስጋ", price: 320, badge: "Popular", desc: "Savory scrambled eggs sautéed with tender seasoned meat strips.", img: "images/scrambled_egg_with_meat.jpg", imgPos: "center center" },
       { id: "b3", en: "Egg sauce", am: "እንቁላል ስልስ", price: 270, desc: "Poached eggs simmered in rich spiced tomato-onion stew.", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=600&q=80" },
       { id: "b4", en: "Fool", am: "ፉል", price: 170, desc: "Warm crushed fava beans seasoned with berbere, oil and herbs.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
       { id: "b5", en: "Fool with tuna", am: "ፉል በ ቱና", price: 250, desc: "Traditional fava bean dish topped with seasoned tuna chunks.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
@@ -949,7 +946,6 @@ function renderMenu() {
   const filteredCategories = menuData.filter(cat => currentCategory === "all" || cat.category === currentCategory);
 
   filteredCategories.forEach(cat => {
-    // Filter items inside category based on search keyword
     const matchingItems = cat.items.filter(item => {
       if (!searchKeyword) return true;
       const kw = searchKeyword.toLowerCase();
@@ -968,10 +964,11 @@ function renderMenu() {
 
       matchingItems.forEach(item => {
         const badgeHtml = item.badge ? `<div class="card-badge">${item.badge}</div>` : "";
+        const posStyle = item.imgPos ? `style="object-position: ${item.imgPos};"` : "";
         html += `
           <div class="card" onclick="openDetailModal('${item.id}')">
             <div class="card-img-wrap">
-              <img src="${item.img}" class="card-img" alt="${item.en}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=300&q=80'">
+              <img src="${item.img}" class="card-img" ${posStyle} alt="${item.en}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=300&q=80'">
               ${badgeHtml}
             </div>
             <div class="card-body">
@@ -1072,7 +1069,10 @@ function openDetailModal(id) {
   currentModalItem = item;
   currentModalQty = 1;
 
-  document.getElementById("modalImg").src = item.img;
+  const modalImg = document.getElementById("modalImg");
+  modalImg.src = item.img;
+  modalImg.style.objectPosition = item.imgPos || "center center";
+
   document.getElementById("modalTitle").textContent = item.en;
   document.getElementById("modalAmharic").textContent = item.am;
   document.getElementById("modalDesc").textContent = item.desc || "Prepared fresh upon ordering.";
