@@ -116,15 +116,15 @@
     line-height: 1.4;
   }
 
-  /* Splash Loading Bar */
+  /* Splash Real Loading Bar */
   .splash-loader-wrap {
-    width: 220px;
-    height: 6px;
+    width: 240px;
+    height: 7px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 99px;
     overflow: hidden;
     margin-bottom: 10px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.25);
   }
 
   .splash-progress-bar {
@@ -132,13 +132,14 @@
     width: 0%;
     background: linear-gradient(90deg, var(--gold), var(--clay));
     border-radius: 99px;
-    transition: width 0.3s ease;
+    transition: width 0.25s ease-out;
   }
 
   .splash-status-txt {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     margin-bottom: 20px;
+    min-height: 20px;
   }
 
   .splash-enter-btn {
@@ -790,16 +791,16 @@
   <div class="splash-overlay" id="splashScreen" onclick="dismissSplash()">
     <div class="splash-content">
       <div class="splash-logo-wrap">
-        <img src="logo.png?v=3" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&q=80'">
+        <img src="logo.png?v=4" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&q=80'">
       </div>
       <div class="splash-title-am amharic">ጄ ናት ቡና</div>
       <div class="splash-welcome-am amharic">እንኳን በደህና ወደ ጄ ናት ቡና መጡ!</div>
 
-      <!-- Preloader Loading Bar -->
+      <!-- Real Asset Preloader Loading Bar -->
       <div class="splash-loader-wrap">
         <div class="splash-progress-bar" id="splashProgressBar"></div>
       </div>
-      <div class="splash-status-txt" id="splashStatusTxt">Loading Menu...</div>
+      <div class="splash-status-txt" id="splashStatusTxt">Loading dish photos... 0%</div>
 
       <button class="splash-enter-btn" id="splashEnterBtn" onclick="dismissSplash()">ወደ ማውጫው ይግቡ &rarr;</button>
     </div>
@@ -807,7 +808,7 @@
     <!-- Developer Logo at Bottom of Splash -->
     <div class="splash-developer-footer">
       <div class="splash-dev-lbl">Developed with ❤️ by</div>
-      <img src="developer_logo.png?v=3" alt="Developer Team Logo" class="splash-dev-logo">
+      <img src="developer_logo.png?v=4" alt="Developer Team Logo" class="splash-dev-logo">
     </div>
   </div>
 
@@ -816,7 +817,7 @@
     <div class="brand-bar">
       <div class="brand-left">
         <div class="logo-container">
-          <img src="logo.png?v=3" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
+          <img src="logo.png?v=4" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
         </div>
         <div class="brand-title">
           <h1>J Nat Coffee</h1>
@@ -862,7 +863,7 @@
     <!-- Developer Logo Footer -->
     <div class="developer-footer">
       <div class="developer-lbl">Developed with ❤️ by</div>
-      <img src="developer_logo.png?v=3" alt="Developer Team Logo" class="developer-logo-img">
+      <img src="developer_logo.png?v=4" alt="Developer Team Logo" class="developer-logo-img">
     </div>
   </div>
 
@@ -920,58 +921,6 @@
   </div>
 
 <script>
-/* Splash Screen Preloader & Auto-Dismiss */
-let splashDismissed = false;
-
-function updateProgress(percent) {
-  const bar = document.getElementById("splashProgressBar");
-  const txt = document.getElementById("splashStatusTxt");
-  if (bar) bar.style.width = percent + "%";
-  if (txt) {
-    if (percent < 100) {
-      txt.textContent = `Preparing Menu (${percent}%)...`;
-    } else {
-      txt.textContent = "Ready! / ዝግጁ ነው!";
-    }
-  }
-}
-
-// Preload critical brand assets
-const criticalAssets = ['logo.png?v=3', 'developer_logo.png?v=3'];
-let loadedAssetsCount = 0;
-
-criticalAssets.forEach(src => {
-  const img = new Image();
-  img.src = src;
-  img.onload = img.onerror = () => {
-    loadedAssetsCount++;
-    const pct = Math.min(100, Math.round((loadedAssetsCount / criticalAssets.length) * 100));
-    updateProgress(pct);
-  };
-});
-
-// Smooth preloader timer
-let currentPct = 10;
-const loaderTimer = setInterval(() => {
-  if (currentPct < 90) {
-    currentPct += 15;
-    updateProgress(currentPct);
-  } else {
-    clearInterval(loaderTimer);
-    updateProgress(100);
-    setTimeout(() => {
-      dismissSplash();
-    }, 600);
-  }
-}, 200);
-
-function dismissSplash() {
-  if (splashDismissed) return;
-  splashDismissed = true;
-  const splash = document.getElementById("splashScreen");
-  if (splash) splash.classList.add("fade-out");
-}
-
 /* Menu Database - Strict Smart Fuzzy Matched Filename Mapping */
 const menuData = [
   {
@@ -1150,6 +1099,61 @@ const menuData = [
   }
 ];
 
+/* TRUE REAL ASSET PRELOADER */
+let splashDismissed = false;
+
+function initRealPreloader() {
+  const allImages = ['logo.png?v=4', 'developer_logo.png?v=4'];
+  
+  menuData.forEach(cat => {
+    cat.items.forEach(item => {
+      if (item.img && !allImages.includes(item.img)) {
+        allImages.push(item.img);
+      }
+    });
+  });
+
+  const totalImages = allImages.length;
+  let loadedCount = 0;
+
+  const bar = document.getElementById("splashProgressBar");
+  const txt = document.getElementById("splashStatusTxt");
+  const btn = document.getElementById("splashEnterBtn");
+
+  function updateRealProgress() {
+    loadedCount++;
+    const percent = Math.min(100, Math.round((loadedCount / totalImages) * 100));
+    if (bar) bar.style.width = percent + "%";
+    if (txt) txt.textContent = `Loading menu photos... ${loadedCount}/${totalImages} (${percent}%)`;
+
+    if (loadedCount >= totalImages) {
+      if (txt) txt.textContent = "✨ All photos ready! / ዝግጁ ነው!";
+      if (btn) {
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+      }
+      setTimeout(() => {
+        dismissSplash();
+      }, 700);
+    }
+  }
+
+  // Preload all real images in background
+  allImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+    img.onload = updateRealProgress;
+    img.onerror = updateRealProgress; // Fail-safe
+  });
+}
+
+function dismissSplash() {
+  if (splashDismissed) return;
+  splashDismissed = true;
+  const splash = document.getElementById("splashScreen");
+  if (splash) splash.classList.add("fade-out");
+}
+
 /* State Variables */
 let currentCategory = "all";
 let searchKeyword = "";
@@ -1162,6 +1166,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCategoryStrip();
   renderMenu();
   setupEvents();
+  initRealPreloader();
 });
 
 /* Render Category Strip */
