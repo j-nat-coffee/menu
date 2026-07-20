@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>J Nat Coffee — Digital Menu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,7 +52,7 @@
   .splash-overlay {
     position: fixed;
     inset: 0;
-    z-index: 999;
+    z-index: 9999;
     background: radial-gradient(circle at center, #2C1B10 0%, #120D0A 100%);
     display: flex;
     flex-direction: column;
@@ -76,8 +79,8 @@
   }
 
   .splash-logo-wrap {
-    width: 135px;
-    height: 135px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     border: 3.5px solid var(--gold);
     overflow: hidden;
@@ -171,8 +174,8 @@
   }
 
   .splash-dev-logo {
-    max-width: 140px;
-    max-height: 42px;
+    max-width: 150px;
+    max-height: 48px;
     object-fit: contain;
     filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7));
   }
@@ -787,7 +790,7 @@
   <div class="splash-overlay" id="splashScreen" onclick="dismissSplash()">
     <div class="splash-content">
       <div class="splash-logo-wrap">
-        <img src="logo.png" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&q=80'">
+        <img src="logo.png?v=3" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&q=80'">
       </div>
       <div class="splash-title-am amharic">ጄ ናት ቡና</div>
       <div class="splash-welcome-am amharic">እንኳን በደህና ወደ ጄ ናት ቡና መጡ!</div>
@@ -804,7 +807,7 @@
     <!-- Developer Logo at Bottom of Splash -->
     <div class="splash-developer-footer">
       <div class="splash-dev-lbl">Developed with ❤️ by</div>
-      <img src="developer_logo.png" alt="Developer Team Logo" class="splash-dev-logo">
+      <img src="developer_logo.png?v=3" alt="Developer Team Logo" class="splash-dev-logo">
     </div>
   </div>
 
@@ -813,7 +816,7 @@
     <div class="brand-bar">
       <div class="brand-left">
         <div class="logo-container">
-          <img src="logo.png" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
+          <img src="logo.png?v=3" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
         </div>
         <div class="brand-title">
           <h1>J Nat Coffee</h1>
@@ -859,7 +862,7 @@
     <!-- Developer Logo Footer -->
     <div class="developer-footer">
       <div class="developer-lbl">Developed with ❤️ by</div>
-      <img src="developer_logo.png" alt="Developer Team Logo" class="developer-logo-img">
+      <img src="developer_logo.png?v=3" alt="Developer Team Logo" class="developer-logo-img">
     </div>
   </div>
 
@@ -934,7 +937,7 @@ function updateProgress(percent) {
 }
 
 // Preload critical brand assets
-const criticalAssets = ['logo.png', 'developer_logo.png'];
+const criticalAssets = ['logo.png?v=3', 'developer_logo.png?v=3'];
 let loadedAssetsCount = 0;
 
 criticalAssets.forEach(src => {
