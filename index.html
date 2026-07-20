@@ -57,8 +57,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 30px 24px 80px;
+    justify-content: space-between;
+    padding: 40px 24px 30px;
     text-align: center;
     transition: opacity 0.6s ease, visibility 0.6s ease;
   }
@@ -76,11 +76,12 @@
     justify-content: center;
     width: 100%;
     max-width: 380px;
+    margin: auto 0;
   }
 
   .splash-logo-wrap {
-    width: 140px;
-    height: 140px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     border: 3.5px solid var(--gold);
     overflow: hidden;
@@ -157,28 +158,51 @@
 
   .splash-enter-btn:active { transform: scale(0.95); }
 
+  /* Splash Developer Section */
   .splash-developer-footer {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    right: 0;
+    width: 100%;
     text-align: center;
-    padding: 0 16px;
+    padding-top: 15px;
+    border-top: 1px solid var(--line-soft);
   }
 
   .splash-dev-lbl {
-    font-size: 0.7rem;
-    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 6px;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
   }
 
   .splash-dev-logo {
-    max-width: 150px;
-    max-height: 48px;
+    max-width: 220px;
+    max-height: 75px;
     object-fit: contain;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7));
+    filter: drop-shadow(0 2px 12px rgba(0,0,0,0.8));
+    display: block;
+    margin: 0 auto;
+  }
+
+  .splash-dev-phone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 8px;
+    color: var(--gold-light);
+  }
+
+  .splash-dev-phone a {
+    color: var(--gold-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .splash-dev-phone a:hover {
+    color: #fff;
   }
 
   /* Header Branding */
@@ -233,12 +257,34 @@
   }
 
   .brand-title .sub {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--gold);
     margin-top: 2px;
     display: flex;
     align-items: center;
     gap: 6px;
+  }
+
+  .header-dev-credit {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .header-dev-logo {
+    height: 22px;
+    max-width: 110px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+  }
+
+  .header-dev-phone {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 500;
   }
 
   .badge-open {
@@ -301,7 +347,7 @@
   /* Category Nav Strip */
   .category-nav-wrapper {
     position: sticky;
-    top: 122px;
+    top: 132px;
     z-index: 90;
     background: var(--bg-dark);
     padding: 10px 0 6px;
@@ -756,16 +802,17 @@
   }
 
   .developer-lbl {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     margin-bottom: 10px;
   }
 
   .developer-logo-img {
-    max-width: 180px;
-    max-height: 55px;
+    max-width: 220px;
+    max-height: 70px;
     object-fit: contain;
     filter: drop-shadow(0 2px 10px rgba(0,0,0,0.6));
     transition: transform 0.3s ease;
@@ -773,6 +820,22 @@
 
   .developer-logo-img:hover {
     transform: scale(1.05);
+  }
+
+  .footer-dev-phone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    color: var(--gold-light);
+  }
+
+  .footer-dev-phone a {
+    color: var(--gold-light);
+    text-decoration: none;
+    font-weight: 500;
   }
 
   .empty-search {
@@ -791,7 +854,7 @@
   <div class="splash-overlay" id="splashScreen" onclick="dismissSplash()">
     <div class="splash-content">
       <div class="splash-logo-wrap">
-        <img src="logo.png?v=4" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&q=80'">
+        <img src="logo.png?v=5" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&q=80'">
       </div>
       <div class="splash-title-am amharic">ጄ ናት ቡና</div>
       <div class="splash-welcome-am amharic">እንኳን በደህና ወደ ጄ ናት ቡና መጡ!</div>
@@ -800,15 +863,20 @@
       <div class="splash-loader-wrap">
         <div class="splash-progress-bar" id="splashProgressBar"></div>
       </div>
-      <div class="splash-status-txt" id="splashStatusTxt">Loading dish photos... 0%</div>
+      <div class="splash-status-txt" id="splashStatusTxt">Loading menu photos... 0%</div>
 
       <button class="splash-enter-btn" id="splashEnterBtn" onclick="dismissSplash()">ወደ ማውጫው ይግቡ &rarr;</button>
     </div>
 
-    <!-- Developer Logo at Bottom of Splash -->
+    <!-- Prominent Developer Section at Bottom of Splash -->
     <div class="splash-developer-footer">
-      <div class="splash-dev-lbl">Developed with ❤️ by</div>
-      <img src="developer_logo.png?v=4" alt="Developer Team Logo" class="splash-dev-logo">
+      <div class="splash-dev-lbl">DEVELOPED BY</div>
+      <img src="developer_logo.png?v=5" alt="Developer Team Logo" class="splash-dev-logo">
+      <div class="splash-dev-phone">
+        <a href="tel:+251904404045">📞 +251 90 440 4045</a>
+        <span>&bull;</span>
+        <a href="tel:+251924401364">+251 92 440 1364</a>
+      </div>
     </div>
   </div>
 
@@ -817,11 +885,17 @@
     <div class="brand-bar">
       <div class="brand-left">
         <div class="logo-container">
-          <img src="logo.png?v=4" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
+          <img src="logo.png?v=5" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
         </div>
         <div class="brand-title">
           <h1>J Nat Coffee</h1>
           <div class="sub"><span class="badge-open"></span> Open Daily &middot; Koye, Addis Ababa</div>
+          <div class="header-dev-credit">
+            <span>By</span>
+            <img src="developer_logo.png?v=5" alt="Developer Logo" class="header-dev-logo">
+            <span>&middot;</span>
+            <a href="tel:+251904404045" class="header-dev-phone">📞 +251 90 440 4045</a>
+          </div>
         </div>
       </div>
     </div>
@@ -862,8 +936,13 @@
 
     <!-- Developer Logo Footer -->
     <div class="developer-footer">
-      <div class="developer-lbl">Developed with ❤️ by</div>
-      <img src="developer_logo.png?v=4" alt="Developer Team Logo" class="developer-logo-img">
+      <div class="developer-lbl">DEVELOPED BY</div>
+      <img src="developer_logo.png?v=5" alt="Developer Team Logo" class="developer-logo-img">
+      <div class="footer-dev-phone">
+        <a href="tel:+251904404045">📞 +251 90 440 4045</a>
+        <span>&bull;</span>
+        <a href="tel:+251924401364">+251 92 440 1364</a>
+      </div>
     </div>
   </div>
 
@@ -1103,7 +1182,7 @@ const menuData = [
 let splashDismissed = false;
 
 function initRealPreloader() {
-  const allImages = ['logo.png?v=4', 'developer_logo.png?v=4'];
+  const allImages = ['logo.png?v=5', 'developer_logo.png?v=5'];
   
   menuData.forEach(cat => {
     cat.items.forEach(item => {
