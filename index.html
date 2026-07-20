@@ -2,11 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#120D0A">
+
 <title>J Nat Coffee — Digital Menu</title>
+<link rel="icon" type="image/png" href="logo.png?v=7">
+<link rel="apple-touch-icon" href="logo.png?v=7">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Serif+Ethiopic:wght@400;600;700&display=swap" rel="stylesheet">
@@ -838,7 +845,7 @@
   <div class="splash-overlay" id="splashScreen" onclick="dismissSplash()">
     <div class="splash-content">
       <div class="splash-logo-wrap">
-        <img src="logo.png?v=6" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&q=80'">
+        <img src="logo.png?v=7" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=200&q=80'">
       </div>
       <div class="splash-title-am amharic">ጄ ናት ቡና</div>
       <div class="splash-welcome-am amharic">እንኳን በደህና ወደ ጄ ናት ቡና መጡ!</div>
@@ -847,7 +854,7 @@
       <div class="splash-loader-wrap">
         <div class="splash-progress-bar" id="splashProgressBar"></div>
       </div>
-      <div class="splash-status-txt" id="splashStatusTxt">Loading menu photos... 0%</div>
+      <div class="splash-status-txt" id="splashStatusTxt">Loading menu... 0%</div>
 
       <button class="splash-enter-btn" id="splashEnterBtn" onclick="dismissSplash()">ወደ ማውጫው ይግቡ &rarr;</button>
     </div>
@@ -856,7 +863,7 @@
     <div class="splash-developer-footer">
       <div class="dev-box">
         <div class="splash-dev-lbl">DEVELOPED BY</div>
-        <img src="developer_logo.png?v=6" alt="Developer Team Logo" class="splash-dev-logo">
+        <img src="developer_logo.png?v=7" alt="Developer Team Logo" class="splash-dev-logo">
         <div class="splash-dev-phone">
           <a href="tel:+251904404045">📞 +251 90 440 4045</a>
           <span>&bull;</span>
@@ -871,7 +878,7 @@
     <div class="brand-bar">
       <div class="brand-left">
         <div class="logo-container">
-          <img src="logo.png?v=6" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
+          <img src="logo.png?v=7" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
         </div>
         <div class="brand-title">
           <h1>J Nat Coffee</h1>
@@ -922,7 +929,7 @@
     <div class="developer-footer">
       <div class="dev-box">
         <div class="splash-dev-lbl">DEVELOPED BY</div>
-        <img src="developer_logo.png?v=6" alt="Developer Team Logo" class="splash-dev-logo">
+        <img src="developer_logo.png?v=7" alt="Developer Team Logo" class="splash-dev-logo">
         <div class="splash-dev-phone">
           <a href="tel:+251904404045">📞 +251 90 440 4045</a>
           <span>&bull;</span>
@@ -1164,11 +1171,11 @@ const menuData = [
   }
 ];
 
-/* TRUE REAL ASSET PRELOADER */
+/* OPTIMIZED BATCHED ASSET PRELOADER (Safe for iOS Safari & Android) */
 let splashDismissed = false;
 
 function initRealPreloader() {
-  const allImages = ['logo.png?v=6', 'developer_logo.png?v=6'];
+  const allImages = ['logo.png?v=7', 'developer_logo.png?v=7'];
   
   menuData.forEach(cat => {
     cat.items.forEach(item => {
@@ -1185,31 +1192,54 @@ function initRealPreloader() {
   const txt = document.getElementById("splashStatusTxt");
   const btn = document.getElementById("splashEnterBtn");
 
-  function updateRealProgress() {
-    loadedCount++;
+  function updateProgressUI() {
     const percent = Math.min(100, Math.round((loadedCount / totalImages) * 100));
     if (bar) bar.style.width = percent + "%";
-    if (txt) txt.textContent = `Loading menu photos... ${loadedCount}/${totalImages} (${percent}%)`;
+    if (txt) txt.textContent = `Loading menu... ${loadedCount}/${totalImages} (${percent}%)`;
 
     if (loadedCount >= totalImages) {
-      if (txt) txt.textContent = "✨ All photos ready! / ዝግጁ ነው!";
+      if (txt) txt.textContent = "✨ Menu Ready! / ዝግጁ ነው!";
       if (btn) {
         btn.style.opacity = "1";
         btn.style.pointerEvents = "auto";
       }
       setTimeout(() => {
         dismissSplash();
-      }, 700);
+      }, 600);
     }
   }
 
-  // Preload all real images in background
-  allImages.forEach(src => {
-    const img = new Image();
-    img.src = src;
-    img.onload = updateRealProgress;
-    img.onerror = updateRealProgress; // Fail-safe
-  });
+  // Preload in non-blocking batches of 5 images so iOS Safari WebKit doesn't throttle or freeze
+  let index = 0;
+  function loadNextBatch() {
+    const batchSize = 5;
+    const end = Math.min(index + batchSize, totalImages);
+    for (let i = index; i < end; i++) {
+      const img = new Image();
+      img.src = allImages[i];
+      img.onload = img.onerror = () => {
+        loadedCount++;
+        updateProgressUI();
+      };
+    }
+    index = end;
+    if (index < totalImages) {
+      setTimeout(loadNextBatch, 50);
+    }
+  }
+
+  loadNextBatch();
+
+  // Fail-safe max timeout for slow connections (7 seconds)
+  setTimeout(() => {
+    if (!splashDismissed) {
+      if (txt) txt.textContent = "✨ Tap to Enter Menu";
+      if (btn) {
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+      }
+    }
+  }, 7000);
 }
 
 function dismissSplash() {
