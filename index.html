@@ -1,986 +1,1147 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>J Nat Coffee — Menu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>J Nat Coffee — Digital Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Serif+Ethiopic:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --cream:#FAF6EF;
-    --paper:#FBF8F2;
-    --ink:#2A2118;
-    --brown:#4A372A;
-    --clay:#A8693E;
-    --clay-soft:#C98B5E;
-    --line:#E4DCC8;
-    --green:#5C6B4F;
-    --cover:#3B2A20;
-    --cover-light:#4E3A2B;
-    --gold:#C9A464;
+  :root {
+    --bg-dark: #120D0A;
+    --bg-card: #1D1510;
+    --bg-card-hover: #261D17;
+    --bg-glass: rgba(29, 21, 16, 0.88);
+    --gold: #D4AF37;
+    --gold-light: #F3E5AB;
+    --clay: #C98B5E;
+    --clay-dark: #A8693E;
+    --text-primary: #F9F6F0;
+    --text-secondary: #CBBDAE;
+    --text-muted: #8E7F70;
+    --line: rgba(212, 175, 55, 0.15);
+    --line-soft: rgba(255, 255, 255, 0.08);
+    --green: #4E8752;
+    --shadow-main: 0 10px 30px rgba(0,0,0,0.6);
+    --shadow-glow: 0 0 20px rgba(212, 175, 55, 0.2);
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
   }
 
-  *{box-sizing:border-box;margin:0;padding:0;}
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-  html,body{
-    height:100%;
-    overflow:hidden;
-    background:#1E1610;
-    font-family:'Source Sans Pro', Helvetica, Arial, sans-serif;
-    color:var(--ink);
-    -webkit-tap-highlight-color:transparent;
-  }
-
-  h1,h2,h3,.amharic{
-    font-family:'Georgia','Noto Serif Ethiopic', serif;
-    font-weight:400;
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 90px;
+    overflow-x: hidden;
   }
 
-  /* ===== Room / stage ===== */
-  .stage{
-    height:100%;
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:radial-gradient(ellipse at 50% 40%, #2B2118 0%, #1A130D 75%);
-    position:relative;
-    overflow:hidden;
+  .amharic {
+    font-family: 'Noto Serif Ethiopic', serif;
   }
 
-  /* faint ambient drifting glow for atmosphere */
-  .stage::before{
-    content:"";
-    position:absolute;
-    width:140%;height:140%;
-    background:radial-gradient(circle at 30% 30%, rgba(201,164,100,0.06), transparent 60%);
-    animation:driftGlow 14s ease-in-out infinite alternate;
-    pointer-events:none;
-  }
-  @keyframes driftGlow{
-    0%{ transform:translate(-4%,-3%) scale(1); }
-    100%{ transform:translate(4%,3%) scale(1.08); }
-  }
-
-  /* ===== Book ===== */
-  .book{
-    position:relative;
-    width:min(94vw, 1180px);
-    height:min(84vh, 720px);
-    perspective:2600px;
-    opacity:0;
-    transform:translateY(18px) scale(0.97);
-    animation:bookEnter 0.9s cubic-bezier(.2,.7,.2,1) 0.05s forwards;
-  }
-  @keyframes bookEnter{
-    to{ opacity:1; transform:translateY(0) scale(1); }
+  /* Header Branding */
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 16px 14px;
+    transition: all 0.3s ease;
   }
 
-  .spread{
-    position:absolute;
-    inset:0;
-    display:flex;
-    border-radius:6px;
-    box-shadow:0 30px 70px rgba(0,0,0,0.55), 0 4px 18px rgba(0,0,0,0.4);
-    background:var(--cover);
-    transition:box-shadow 0.4s ease;
+  .brand-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
   }
 
-  .spine{
-    position:absolute;
-    left:50%;
-    top:0;
-    bottom:0;
-    width:14px;
-    margin-left:-7px;
-    background:linear-gradient(90deg, rgba(0,0,0,0.25), rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.05) 70%, rgba(0,0,0,0.25));
-    z-index:40;
-    pointer-events:none;
-    transition:opacity 0.3s ease;
+  .brand-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
-  .leaf{
-    position:absolute;
-    top:0;
-    bottom:0;
-    width:50%;
-    transform-style:preserve-3d;
-    transition:transform 0.85s cubic-bezier(.45,.05,.18,1);
-    will-change:transform;
-    z-index:5;
+  .logo-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    overflow: hidden;
+    background: #000;
+    box-shadow: var(--shadow-glow);
+    flex-shrink: 0;
   }
 
-  .leaf.left{ left:0; transform-origin:right center; }
-  .leaf.right{ left:50%; transform-origin:left center; }
-
-  .leaf .face{
-    position:absolute;
-    inset:0;
-    backface-visibility:hidden;
-    background:var(--paper);
-    overflow:hidden;
-    border-radius:6px 0 0 6px;
-  }
-  .leaf.right .face{ border-radius:0 6px 6px 0; }
-
-  .leaf .face.back{
-    transform:rotateY(180deg);
+  .logo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  /* page curl shading */
-  .leaf .face::after{
-    content:"";
-    position:absolute;
-    top:0; bottom:0;
-    width:36px;
-    pointer-events:none;
-    transition:opacity 0.4s ease;
-  }
-  .leaf.left .face::after{ right:0; background:linear-gradient(to left, rgba(0,0,0,0.10), transparent); }
-  .leaf.right .face::after{ left:0; background:linear-gradient(to right, rgba(0,0,0,0.10), transparent); }
-
-  /* a soft moving shadow that sweeps across while a leaf is turning */
-  .leaf::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(90deg, rgba(0,0,0,0.22), transparent 60%);
-    opacity:0;
-    transition:opacity 0.85s ease;
-    pointer-events:none;
-    z-index:2;
-  }
-  .leaf.turning::before{ opacity:1; }
-
-  /* flipping states */
-  .leaf.flip-right{ transform:rotateY(-180deg); }
-  .leaf.flip-left{ transform:rotateY(180deg); }
-
-  /* ===== Page content ===== */
-  .page-inner{
-    position:absolute;
-    inset:0;
-    padding:42px 38px 30px;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
+  .brand-title h1 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
   }
 
-  /* a light one-time settle for headings only — long item lists no longer
-     animate item-by-item, since animating 15-20 elements at once on a
-     content-heavy page competed with the flip animation for paint time
-     and made those pages feel laggier than simpler ones like the cover */
-  .page-head, .cover-face > *, .back-face > *, .blurb{
-    animation:contentSettle 0.45s ease both;
-  }
-  @keyframes contentSettle{
-    from{ opacity:0; transform:translateY(6px); }
-    to{ opacity:1; transform:translateY(0); }
+  .brand-title .sub {
+    font-size: 0.8rem;
+    color: var(--gold);
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
-  .page-inner.cover-face{
-    background:linear-gradient(160deg, var(--cover), var(--cover-light));
-    color:var(--cream);
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:30px;
+  .badge-open {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
   }
 
-  .cover-face .brandmark{
-    width:74px;height:74px;
-    border:1.4px solid var(--gold);
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    margin-bottom:22px;
-    animation:brandPulse 3.4s ease-in-out infinite;
-  }
-  @keyframes brandPulse{
-    0%,100%{ box-shadow:0 0 0 0 rgba(201,164,100,0.0); transform:scale(1); }
-    50%{ box-shadow:0 0 0 8px rgba(201,164,100,0.08); transform:scale(1.04); }
-  }
-  .cover-face .brandmark svg{ width:34px; height:34px; stroke:var(--gold); fill:none; stroke-width:1.4; }
-
-  .cover-face h1{
-    font-size:2.5rem;
-    letter-spacing:0.02em;
-    color:var(--cream);
-  }
-  .cover-face .amharic{
-    font-size:1.3rem;
-    color:var(--gold);
-    margin-top:6px;
-  }
-  .cover-face .tag{
-    margin-top:18px;
-    font-size:0.82rem;
-    letter-spacing:0.16em;
-    text-transform:uppercase;
-    color:#D8C9AE;
-  }
-  .cover-face .hint{
-    margin-top:34px;
-    font-size:0.78rem;
-    color:#B7A88C;
-    animation:hintFloat 2.2s ease-in-out infinite;
-  }
-  @keyframes hintFloat{
-    0%,100%{ opacity:0.65; transform:translateY(0); }
-    50%{ opacity:1; transform:translateY(-3px); }
+  .search-box {
+    position: relative;
+    width: 100%;
   }
 
-  .page-inner.back-face{
-    background:linear-gradient(160deg, var(--cover-light), var(--cover));
-    color:var(--cream);
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-  }
-  .back-face .hours{ font-size:0.85rem; color:#D8C9AE; margin-bottom:26px; }
-  .back-face .made-by{
-    font-size:0.72rem;
-    letter-spacing:0.06em;
-    color:var(--gold);
-    border-top:1px solid rgba(201,164,100,0.3);
-    padding-top:16px;
-    margin-top:6px;
-  }
-  .back-face .made-by a{ color:var(--gold); border-bottom:1px solid var(--gold); text-decoration:none; }
-
-  .page-head{
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    border-bottom:1px solid var(--line);
-    padding-bottom:10px;
-    margin-bottom:16px;
-  }
-  .page-head h2{ font-size:1.5rem; color:var(--ink); }
-  .page-head .amharic{ font-size:1rem; color:var(--clay); }
-
-  .page-num{
-    position:absolute;
-    bottom:14px;
-    font-size:0.72rem;
-    color:var(--clay);
-    letter-spacing:0.06em;
-  }
-  .leaf.left .page-num{ left:38px; }
-  .leaf.right .page-num{ right:38px; }
-
-  .menu-list{
-    overflow-y:auto;
-    flex:1;
-    padding-right:4px;
-    -webkit-overflow-scrolling:touch;
+  .search-input {
+    width: 100%;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--line-soft);
+    border-radius: 99px;
+    padding: 0 16px 0 44px;
+    color: var(--text-primary);
+    font-size: 0.92rem;
+    outline: none;
+    transition: all 0.25s ease;
   }
 
-  .menu-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    gap:10px;
-    padding:9px 2px;
-    border-bottom:1px dotted var(--line);
-    border-radius:4px;
-    transition:background 0.2s ease, padding-left 0.2s ease;
-  }
-  .menu-item:hover{ background:rgba(168,105,62,0.06); padding-left:8px; }
-  .menu-item:active{ background:rgba(168,105,62,0.12); }
-
-  .menu-item .name{ display:flex; flex-direction:column; }
-  .menu-item .name .en{ font-size:0.92rem; color:var(--ink); }
-  .menu-item .name .am{ font-size:0.78rem; color:var(--clay); font-family:'Georgia','Noto Serif Ethiopic',serif; margin-top:1px; }
-  .menu-item .price{ font-size:0.85rem; color:var(--brown); font-weight:600; white-space:nowrap; }
-  .menu-item .price::before{ content:"ETB "; font-size:0.62rem; font-weight:400; color:var(--clay); }
-
-  .subhead{
-    font-size:0.85rem;
-    color:var(--green);
-    border-bottom:1px solid var(--line);
-    padding-bottom:5px;
-    margin:14px 0 4px;
-  }
-  .subhead:first-child{ margin-top:0; }
-
-  .contents-list{ list-style:none; flex:1; }
-  .contents-list li{
-    display:flex;
-    justify-content:space-between;
-    font-size:0.95rem;
-    padding:10px 0;
-    border-bottom:1px dotted var(--line);
-    color:var(--brown);
-  }
-  .contents-list li span.no{ color:var(--clay); font-size:0.8rem; }
-
-  .blurb{ color:var(--brown); font-size:0.85rem; margin-bottom:10px; line-height:1.5; }
-
-  /* ===== Controls ===== */
-  .controls{
-    position:absolute;
-    bottom:-58px;
-    left:0; right:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:18px;
+  .search-input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--gold);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
   }
 
-  .nav-btn{
-    width:42px;height:42px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.18);
-    color:#E8DCC4;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    transition:background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-    font-size:1.1rem;
-    user-select:none;
-    flex-shrink:0;
-  }
-  .nav-btn:hover{ background:rgba(255,255,255,0.14); box-shadow:0 0 0 4px rgba(255,255,255,0.04); }
-  .nav-btn:active{ transform:scale(0.88); }
-  .nav-btn.disabled{ opacity:0.25; pointer-events:none; }
-
-  .progress{
-    font-size:0.78rem;
-    color:#B7A88C;
-    letter-spacing:0.05em;
-    min-width:64px;
-    text-align:center;
-    transition:opacity 0.2s ease;
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
   }
 
-  .tabs{
-    position:absolute;
-    top:-46px;
-    left:0; right:0;
-    display:flex;
-    justify-content:center;
-    gap:6px;
-    flex-wrap:wrap;
-    padding:0 10px;
-  }
-  .tabs button{
-    font-size:0.68rem;
-    letter-spacing:0.04em;
-    color:#C9BBA0;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:999px;
-    padding:6px 12px;
-    cursor:pointer;
-    transition:all 0.2s ease, transform 0.15s ease;
-    white-space:nowrap;
-  }
-  .tabs button:hover{ transform:translateY(-1px); }
-  .tabs button:active{ transform:translateY(0) scale(0.95); }
-  .tabs button:hover, .tabs button.active{
-    background:var(--clay);
-    border-color:var(--clay);
-    color:#fff;
-  }
-  .tabs button.active{ box-shadow:0 2px 8px rgba(168,105,62,0.45); }
-
-  /* click zones to turn pages */
-  .clickzone{
-    position:absolute;
-    top:0; bottom:0;
-    width:8%;
-    z-index:5000;
-    cursor:pointer;
-  }
-  .clickzone.cz-left{ left:0; }
-  .clickzone.cz-right{ right:0; }
-
-  /* swipe hint shimmer, shown briefly on first load on touch devices */
-  .swipe-hint{
-    position:absolute;
-    left:0; right:0; bottom:8%;
-    display:flex;
-    justify-content:center;
-    pointer-events:none;
-    opacity:0;
-    z-index:45;
-  }
-  .swipe-hint span{
-    background:rgba(0,0,0,0.55);
-    color:#F1E7D4;
-    font-size:0.72rem;
-    letter-spacing:0.04em;
-    padding:7px 14px;
-    border-radius:999px;
-    backdrop-filter:blur(2px);
-  }
-  .swipe-hint.show{
-    animation:swipeHintFade 2.6s ease forwards;
-  }
-  @keyframes swipeHintFade{
-    0%{ opacity:0; transform:translateY(6px); }
-    15%{ opacity:1; transform:translateY(0); }
-    80%{ opacity:1; }
-    100%{ opacity:0; }
+  .clear-search {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: none;
   }
 
-  /* ===== Responsive: phones ===== */
-  @media (max-width:760px){
-    html,body{ height:100%; }
-    .stage{
-      height:100dvh;
-      /* fixed pixel reserves (not dvh-percentage) so the tab strip above and
-         the prev/next controls below always have guaranteed room, on every
-         phone height — previously this relied on the leftover gap from
-         centering an 88dvh book in a 100dvh stage, which shrinks on shorter
-         screens and ends up smaller than the fixed-height tabs/controls,
-         clipping them off the bottom of the screen */
-      padding-top:56px;
-      padding-bottom:calc(66px + env(safe-area-inset-bottom, 0px));
+  /* Category Nav Strip */
+  .category-nav-wrapper {
+    position: sticky;
+    top: 122px;
+    z-index: 90;
+    background: var(--bg-dark);
+    padding: 10px 0 6px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .category-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 16px 6px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .category-strip::-webkit-scrollbar { display: none; }
+
+  .cat-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--line-soft);
+    border-radius: 99px;
+    padding: 8px 16px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .cat-btn:hover, .cat-btn.active {
+    background: linear-gradient(135deg, var(--clay-dark), var(--clay));
+    border-color: var(--gold);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(201, 139, 94, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .cat-btn.active { font-weight: 600; }
+
+  /* Main Container */
+  .main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 20px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-title h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 0.02em;
+  }
+
+  .section-title .am-sub {
+    font-size: 0.95rem;
+    color: var(--clay);
+  }
+
+  /* Grid Layout */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 14px;
+  }
+
+  @media (min-width: 600px) {
+    .menu-grid {
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
     }
-
-    .book{
-      width:100vw;
-      height:100%;
-      max-height:none;
-      perspective:1800px;
-    }
-
-    /* single full-width page on phones, no visible spine */
-    .spine{ opacity:0; width:0; }
-
-    .leaf{ width:100%; left:0 !important; transform-origin:left center; }
-    .leaf .face{ border-radius:8px; }
-    .leaf.right .face{ border-radius:8px; }
-
-    .spread{ border-radius:8px; }
-
-    .page-inner{ padding:24px 18px 18px; }
-    .page-head h2{ font-size:1.2rem; }
-    .page-head .amharic{ font-size:0.85rem; }
-    .menu-item .name .en{ font-size:0.86rem; }
-    .menu-item .name .am{ font-size:0.74rem; }
-    .menu-item{ padding:11px 2px; }
-    .cover-face h1{ font-size:1.8rem; }
-    .cover-face .amharic{ font-size:1.05rem; }
-
-    .page-num{ display:none; }
-
-    .tabs{
-      top:auto;
-      bottom:calc(100% + 8px);
-      left:0; right:0;
-      justify-content:flex-start;
-      flex-wrap:nowrap;
-      overflow-x:auto;
-      scrollbar-width:none;
-      -webkit-overflow-scrolling:touch;
-      padding:0 14px;
-      mask-image:linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
-    }
-    .tabs::-webkit-scrollbar{ display:none; }
-    .tabs button{ flex-shrink:0; padding:7px 13px; font-size:0.66rem; }
-
-    .controls{
-      bottom:calc(-1 * (env(safe-area-inset-bottom, 0px) + 52px));
-      gap:22px;
-    }
-    .nav-btn{ width:48px; height:48px; font-size:1.25rem; }
-
-    /* on touch devices these full-height edge strips sat on top of the
-       scrollable menu list (z-index:5000) and swallowed the touch, so a
-       swipe-down that started near the left/right edge of the screen
-       never reached .menu-list and the page wouldn't scroll. Page turning
-       on phones already works fine via the swipe handler on the whole
-       book plus the prev/next buttons, so the tap zones are unneeded here
-       and we let touches pass through to whatever is underneath instead. */
-    .clickzone{ width:14%; pointer-events:none; }
   }
 
-  @media (max-width:420px){
-    .cover-face h1{ font-size:1.55rem; }
-    .page-inner{ padding:20px 14px 16px; }
+  /* Card Component */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    animation: fadeIn 0.4s ease forwards;
   }
 
-  @media (prefers-reduced-motion: reduce){
-    .leaf, .book, .stage::before, .brandmark, .hint, .page-inner > *{ animation:none !important; transition:none !important; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--gold);
+    box-shadow: var(--shadow-main);
+  }
+
+  .card-img-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 70%; /* 10:7 aspect ratio */
+    background: #18110B;
+    overflow: hidden;
+  }
+
+  .card-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .card:hover .card-img {
+    transform: scale(1.06);
+  }
+
+  .card-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(18, 13, 10, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .card-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  .card-title-en {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.25;
+  }
+
+  .card-title-am {
+    font-size: 0.78rem;
+    color: var(--clay);
+    margin-top: 3px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px dotted var(--line-soft);
+  }
+
+  .card-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .card-price::after {
+    content: " ETB";
+    font-size: 0.68rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .add-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .add-btn:active, .add-btn:hover {
+    background: var(--gold);
+    color: #000;
+    transform: scale(1.1);
+  }
+
+  /* Floating Order Calculator Bar */
+  .order-bar {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    width: calc(100% - 32px);
+    max-width: 500px;
+    background: linear-gradient(135deg, #2B1E15, #1A120C);
+    border: 1.5px solid var(--gold);
+    border-radius: 99px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.8), var(--shadow-glow);
+    z-index: 200;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .order-bar.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .order-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .order-count {
+    background: var(--gold);
+    color: #000;
+    font-size: 0.85rem;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .order-total-lbl {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .order-total-val {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--gold-light);
+  }
+
+  .view-order-btn {
+    background: var(--gold);
+    color: #000;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .view-order-btn:active { transform: scale(0.95); }
+
+  /* Modal Sheet */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 300;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  @media (min-width: 600px) {
+    .modal-overlay { align-items: center; }
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-sheet {
+    width: 100%;
+    max-width: 520px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 24px 24px 0 0;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 24px;
+    position: relative;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1);
+  }
+
+  @media (min-width: 600px) {
+    .modal-sheet { border-radius: 24px; transform: translateY(20px) scale(0.95); }
+  }
+
+  .modal-overlay.active .modal-sheet {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .modal-img {
+    width: 100%;
+    height: 220px;
+    border-radius: 16px;
+    object-fit: cover;
+    margin-bottom: 16px;
+  }
+
+  .modal-title { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); }
+  .modal-amharic { font-size: 1.1rem; color: var(--gold); margin-top: 2px; }
+  .modal-desc { font-size: 0.9rem; color: var(--text-secondary); margin: 12px 0 20px; line-height: 1.5; }
+
+  .qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .qty-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 99px;
+    padding: 6px 14px;
+  }
+
+  .qty-btn {
+    background: none; border: none;
+    color: var(--gold);
+    font-size: 1.3rem; font-weight: 700;
+    cursor: pointer;
+    width: 24px;
+  }
+
+  .qty-num { font-size: 1rem; font-weight: 700; color: var(--text-primary); min-width: 20px; text-align: center; }
+
+  .add-to-tray-btn {
+    background: linear-gradient(135deg, var(--gold), var(--clay));
+    color: #000;
+    border: none;
+    border-radius: 99px;
+    padding: 14px 24px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Payment Section Card */
+  .payment-card {
+    background: linear-gradient(145deg, #231912, #18110C);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 30px;
+  }
+
+  .payment-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .payment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dotted var(--line-soft);
+    font-size: 0.88rem;
+  }
+
+  .payment-row:last-child { border-bottom: none; }
+
+  .copy-tag {
+    font-size: 0.72rem;
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold-light);
+    padding: 4px 10px;
+    border-radius: 99px;
+    cursor: pointer;
+    border: 1px solid var(--line);
+  }
+
+  .empty-search {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-muted);
+  }
+
+  .empty-search svg { width: 48px; height: 48px; fill: none; stroke: var(--text-muted); stroke-width: 1.5; margin-bottom: 12px; }
+
 </style>
 </head>
 <body>
 
-<div class="stage">
-  <div class="book" id="book">
-
-    <div class="tabs" id="tabs"></div>
-
-    <div class="spine"></div>
-    <div class="clickzone cz-left" id="czLeft" aria-label="Previous page"></div>
-    <div class="clickzone cz-right" id="czRight" aria-label="Next page"></div>
-
-    <!-- spreads injected here by JS -->
-    <div id="spreadHost"></div>
-
-    <div class="swipe-hint" id="swipeHint"><span>Swipe to turn pages</span></div>
-
-    <div class="controls">
-      <div class="nav-btn" id="prevBtn">&#8249;</div>
-      <div class="progress" id="progress">1 / 1</div>
-      <div class="nav-btn" id="nextBtn">&#8250;</div>
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-bar">
+      <div class="brand-left">
+        <div class="logo-container">
+          <img src="logo.png" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
+        </div>
+        <div class="brand-title">
+          <h1>J Nat Coffee</h1>
+          <div class="sub"><span class="badge-open"></span> Open Daily &middot; Koye, Addis Ababa</div>
+        </div>
+      </div>
     </div>
 
+    <!-- Live Search -->
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search menu (English or አማርኛ)..." autocomplete="off">
+      <button class="clear-search" id="clearSearchBtn">&times;</button>
+    </div>
+  </header>
+
+  <!-- Category Nav Strip -->
+  <div class="category-nav-wrapper">
+    <div class="category-strip" id="categoryStrip"></div>
   </div>
-</div>
+
+  <!-- Main Menu Grid Container -->
+  <main class="main-content" id="mainContent"></main>
+
+  <!-- Payment Card Footer -->
+  <div class="main-content">
+    <div class="payment-card">
+      <div class="payment-title">💳 Direct Payment Accounts</div>
+      <div class="payment-row">
+        <div><strong>CBE</strong> &middot; Commercial Bank of Ethiopia</div>
+        <div class="copy-tag" onclick="copyText('1000641332837')">1000641332837 📋</div>
+      </div>
+      <div class="payment-row">
+        <div><strong>BOA</strong> &middot; Bank of Abyssinia</div>
+        <div class="copy-tag" onclick="copyText('200756002')">200756002 📋</div>
+      </div>
+      <div class="payment-row">
+        <div><strong>Telebirr</strong></div>
+        <div class="copy-tag" onclick="copyText('0908488848')">0908488848 📋</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Order Calculator Bar -->
+  <div class="order-bar" id="orderBar">
+    <div class="order-info">
+      <div class="order-count" id="orderCount">0</div>
+      <div>
+        <div class="order-total-lbl">Table Total</div>
+        <div class="order-total-val" id="orderTotal">0 ETB</div>
+      </div>
+    </div>
+    <button class="view-order-btn" onclick="openCartModal()">View Order</button>
+  </div>
+
+  <!-- Item Detail Modal -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-sheet">
+      <button class="modal-close" onclick="closeModal('detailModal')">&times;</button>
+      <img src="" id="modalImg" class="modal-img" alt="Item Image">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-amharic amharic" id="modalAmharic"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div style="font-size:1.2rem; font-weight:700; color:var(--gold);" id="modalPrice"></div>
+
+      <div class="qty-row">
+        <span>Select Quantity</span>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeModalQty(-1)">-</button>
+          <span class="qty-num" id="modalQtyNum">1</span>
+          <button class="qty-btn" onclick="changeModalQty(1)">+</button>
+        </div>
+      </div>
+
+      <button class="add-to-tray-btn" onclick="addModalItemToCart()">Add to Table Order</button>
+    </div>
+  </div>
+
+  <!-- Cart Modal -->
+  <div class="modal-overlay" id="cartModal">
+    <div class="modal-sheet">
+      <button class="modal-close" onclick="closeModal('cartModal')">&times;</button>
+      <div class="modal-title" style="margin-bottom:16px;">📋 Table Order Calculator</div>
+      <div id="cartItemsList"></div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:16px; border-top:1px solid var(--line); font-size:1.1rem; font-weight:700;">
+        <span>Total Bill:</span>
+        <span style="color:var(--gold);" id="cartModalTotal">0 ETB</span>
+      </div>
+
+      <button class="add-to-tray-btn" style="margin-top:20px;" onclick="closeModal('cartModal')">Back to Menu</button>
+    </div>
+  </div>
 
 <script>
-/* ---------- Data ---------- */
-const sections = [
+/* Menu Database with curated imagery & details */
+const menuData = [
   {
-    id:'cover', tab:'Cover', kind:'cover'
-  },
-  {
-    id:'contents', tab:'Contents', kind:'contents'
-  },
-  {
-    id:'breakfast', tab:'Breakfast', en:'Breakfast', am:'ቁርስ',
-    blurb:'Eggs, fool and fetira, made the way mornings in Addis call for.',
-    items:[
-      ['Scrambled egg','እንቁላል ፍርፍር',220],
-      ['Scrambled egg with meat','እንቁላል ፍርፍር በስጋ',320],
-      ['Egg sauce','እንቁላል ስልስ',270],
-      ['Fool','ፉል',170],
-      ['Fool with tuna','ፉል በ ቱና',250],
-      ['Special fool','እስፔሻል ፉል',220],
-      ['Chechebesa','ጨጨብሳ',200],
-      ['Special chechebesa','እስፔሻል ጨጨብሳ',270],
-      ['Special sandwich','እስፔሻል ሳንድዊች',400],
-      ['Egg sandwich','እንቁላል ሳንድዊች',270],
-      ['Tuna sandwich','ቱና ሳንድዊች',350],
-      ['Chicken sandwich','ቺክን ሳንድዊች',450],
-      ['Veggie sandwich','አትክልት ሳንድዊች',300],
-      ['Club sandwich','ክለብ ሳንድዊች',500],
-      ['Waffle','ዋፍል',300],
-      ['French toast','ፍሬንች ቶስት',300],
-      ['Kinche','ቅንጭ',300],
-      ['Fasting fetira','የፆም ፈጢራ',350],
-      ['Fetira with egg','ፈጢራ በ እንቁላል',350],
-      ['Special fetira','እስፔሻል ፈጢራ',420],
+    category: "coffee",
+    catName: "Tea & Coffee",
+    catAm: "ሻይ እና ቡና",
+    icon: "☕",
+    items: [
+      { id: "c1", en: "Coffee", am: "ቡና", price: 50, badge: "Signature", desc: "Freshly roasted Ethiopian highlands coffee brewed slow in traditional style.", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" },
+      { id: "c2", en: "Espresso", am: "እስፕሬሶ", price: 70, desc: "Rich and intense shot of pure concentrated dark roast coffee.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" },
+      { id: "c3", en: "Macchiato", am: "ማኪያቶ", price: 90, badge: "Popular", desc: "Espresso layered with velvety steamed milk foam.", img: "https://images.unsplash.com/photo-1557772611-722dabe20327?auto=format&fit=crop&w=600&q=80" },
+      { id: "c4", en: "Steamed milk with coffee", am: "እስቲም ወተት በቡና", price: 115, desc: "Warm steamed milk gently infused with aromatic coffee.", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80" },
+      { id: "c5", en: "Espresso shot", am: "እስፕሪስ", price: 50, desc: "Extra energizing single espresso shot.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" },
+      { id: "c6", en: "Milk", am: "ወተት", price: 95, desc: "Fresh steamed whole milk.", img: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80" },
+      { id: "c7", en: "Black tea", am: "ጥቁር ሻይ", price: 40, desc: "Steeped premium black tea leaves served warm.", img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80" },
+      { id: "c8", en: "Lemon tea", am: "ሻይ በሎሚ", price: 50, desc: "Invigorating black tea steeped with fresh citrus lemon slice.", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" },
+      { id: "c9", en: "Cinnamon tea", am: "ሻይ በቅመም", price: 45, desc: "Warm spiced tea blended with fragrant cinnamon bark.", img: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=600&q=80" },
+      { id: "c10", en: "Keshir", am: "ቀሽር", price: 50, desc: "Traditional comforting spiced ginger and husk tea.", img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80" },
+      { id: "c11", en: "Hibiscus tea", am: "ከርከዴ ሻይ", price: 75, desc: "Ruby red tart infusion of dried hibiscus flowers.", img: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=600&q=80" }
     ]
   },
   {
-    id:'lunch', tab:'Lunch', en:'Lunch', am:'ምሳ',
-    blurb:'Shiro, tegabino, pasta and firfir. The plates people come back for.',
-    items:[
-      ['Bozena shiro','ቦዘና ሽሮ',350],
-      ['Shiro','ሽሮ',200],
-      ['Shiro with butter','ሽሮ በቅቤ',230],
-      ['Tegabino','ተጋቢኖ',280],
-      ['Pasta with sauce','ፓስታ በስጎ',250],
-      ['Pasta with meat','ፓስታ በስጋ',350],
-      ['Pasta with vegetable','ፓስታ በአትክልት',300],
-      ['Pasta with egg','ፓስታ በ እንቁላል',300],
-      ['Tmatim lebeleb','ቲማቲም ለብለብ',180],
-      ['Tmatim sils','ቲማቲም ስልስ',200],
-      ['Firfir','ፍርፍር',200],
-      ['Firfir with egg','ፍርፍር በእንቁላል',250],
-      ['Tibs firfir','ጥብስ ፍርፍር',350],
-      ['Sega firfir','ስጋ ፍርፍር',320],
-      ['Quanta firfir','ቐንጣ ፍርፍር',420],
-      ['Tibs','ጥብስ',450],
-      ['Dulet','ዱለት',350],
+    category: "breakfast",
+    catName: "Breakfast",
+    catAm: "ቁርስ",
+    icon: "🍳",
+    items: [
+      { id: "b1", en: "Scrambled egg", am: "እንቁላል ፍርፍር", price: 220, desc: "Fluffy scrambled eggs prepared with onions, tomatoes and green chillies.", img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80" },
+      { id: "b2", en: "Scrambled egg with meat", am: "እንቁላል ፍርፍር በስጋ", price: 320, badge: "Popular", desc: "Savory scrambled eggs sautéed with tender minced beef strips.", img: "https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=600&q=80" },
+      { id: "b3", en: "Egg sauce", am: "እንቁላል ስልስ", price: 270, desc: "Poached eggs simmered in rich spiced tomato-onion stew.", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=600&q=80" },
+      { id: "b4", en: "Fool", am: "ፉል", price: 170, desc: "Warm crushed fava beans seasoned with berbere, oil and herbs.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
+      { id: "b5", en: "Fool with tuna", am: "ፉል በ ቱና", price: 250, desc: "Traditional fava bean dish topped with seasoned tuna chunks.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
+      { id: "b6", en: "Special fool", am: "እስፔሻል ፉል", price: 220, badge: "Chef's Special", desc: "Rich fava bean dish topped with boiled egg, butter, yogurt and tomatoes.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
+      { id: "b7", en: "Chechebesa", am: "ጨጨብሳ", price: 200, badge: "Popular", desc: "Shredded flatbread cooked in spiced niter kibbeh butter and berbere.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" },
+      { id: "b8", en: "Special chechebesa", am: "እስፔሻል ጨጨብሳ", price: 270, badge: "Chef's Special", desc: "Chechebesa enriched with honey and fried egg on top.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" },
+      { id: "b9", en: "Special sandwich", am: "እስፔሻል ሳንድዊች", price: 400, desc: "Double layer crusty loaf filled with cheese, meat, egg and veggies.", img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80" },
+      { id: "b10", en: "Egg sandwich", am: "እንቁላል ሳንድዊች", price: 270, desc: "Fresh bread stuffed with seasoned fried eggs and crisp tomatoes.", img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80" },
+      { id: "b11", en: "Tuna sandwich", am: "ቱና ሳንድዊች", price: 350, desc: "Seasoned tuna salad filling with fresh lettuce and mayo.", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" },
+      { id: "b12", en: "Chicken sandwich", am: "ቺክን ሳንድዊች", price: 450, desc: "Grilled chicken fillet on artisan bread with light sauce.", img: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=600&q=80" },
+      { id: "b13", en: "Veggie sandwich", am: "አትክልት ሳንድዊች", price: 300, badge: "Fasting", desc: "Fresh avocado, tomatoes, cucumber and lettuce in oven bread.", img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80" },
+      { id: "b14", en: "Club sandwich", am: "ክለብ ሳንድዊች", price: 500, desc: "Triple decker toasted sandwich served with French fries.", img: "https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=600&q=80" },
+      { id: "b15", en: "Waffle", am: "ዋፍል", price: 300, desc: "Golden crispy Belgian waffle served warm with syrup or honey.", img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=600&q=80" },
+      { id: "b16", en: "French toast", am: "ፍሬንች ቶስት", price: 300, desc: "Pan-fried egg-soaked thick brioche toast sprinkled with sweet cinnamon.", img: "https://images.unsplash.com/photo-1484723091479-0097771360da?auto=format&fit=crop&w=600&q=80" },
+      { id: "b17", en: "Kinche", am: "ቅንጭ", price: 300, desc: "Cracked wheat cereal cooked in spiced butter or oil.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
+      { id: "b18", en: "Fasting fetira", am: "የፆም ፈጢራ", price: 350, badge: "Fasting", desc: "Crispy layered pastry served with pure Ethiopian honey.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" },
+      { id: "b19", en: "Fetira with egg", am: "ፈጢራ በ እንቁላል", price: 350, desc: "Flaky fetira flatbread folded over seasoned fried egg.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" },
+      { id: "b20", en: "Special fetira", am: "እስፔሻል ፈጢራ", price: 420, desc: "Fetira filled with egg and honey combination.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" }
     ]
   },
   {
-    id:'burgers', tab:'Burgers & wraps', en:'Burgers and wraps', am:'በርገር እና ሸዋርማ',
-    blurb:'For when you want something familiar, made well.',
-    groups:[
-      {h:'Burgers / በርገር', items:[
-        ['Special burger','እስፔሻል በርገር',600],
-        ['Double burger','ደብል በርገር',550],
-        ['Beef burger','ቢፍ በርገር',450],
-        ['Chicken burger','ቺክን በርገር',600],
-        ['Cheesy burger','ቺዝ በርገር',500],
-      ]},
-      {h:'Wraps / ሸዋርማ', items:[
-        ['Beef wrap','ቢፍ ሸዋርማ',400],
-        ['Chicken wrap','ቺክን ሸዋርማ',500],
-        ['Tuna wrap','ቱና ሸዋርማ',480],
-        ['Veggie wrap','አትክልት ሸዋርማ',300],
-        ['Special wrap','እስፔሻል ሸዋርማ',500],
-      ]}
+    category: "lunch",
+    catName: "Lunch",
+    catAm: "ምሳ",
+    icon: "🍲",
+    items: [
+      { id: "l1", en: "Bozena shiro", am: "ቦዘና ሽሮ", price: 350, badge: "Popular", desc: "Rich chickpea flour stew cooked with tender strips of beef.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
+      { id: "l2", en: "Shiro", am: "ሽሮ", price: 200, badge: "Fasting", desc: "Classic seasoned powdered chickpea stew served bubbling hot.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
+      { id: "l3", en: "Shiro with butter", am: "ሽሮ በቅቤ", price: 230, desc: "Aromatic chickpea stew finished with spiced niter kibbeh butter.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
+      { id: "l4", en: "Tegabino", am: "ተጋቢኖ", price: 280, badge: "Chef's Special", desc: "Thick spiced shiro served boiling hot in a clay pot.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
+      { id: "l5", en: "Pasta with sauce", am: "ፓስታ በስጎ", price: 250, badge: "Fasting", desc: "Italian spaghetti tossed in rich tomato garlic herb marinara.", img: "https://images.unsplash.com/photo-1621996346565-e3d5d6281273?auto=format&fit=crop&w=600&q=80" },
+      { id: "l6", en: "Pasta with meat", am: "ፓስታ በስጋ", price: 350, desc: "Spaghetti served with savory minced meat bolognaise sauce.", img: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80" },
+      { id: "l7", en: "Pasta with vegetable", am: "ፓስታ በአትክልት", price: 300, badge: "Fasting", desc: "Spaghetti sautéed with fresh carrots, zucchini and sweet peppers.", img: "https://images.unsplash.com/photo-1621996346565-e3d5d6281273?auto=format&fit=crop&w=600&q=80" },
+      { id: "l8", en: "Pasta with egg", am: "ፓስታ በ እንቁላል", price: 300, desc: "Warm pasta served with fried egg toppings.", img: "https://images.unsplash.com/photo-1621996346565-e3d5d6281273?auto=format&fit=crop&w=600&q=80" },
+      { id: "l9", en: "Tmatim lebeleb", am: "ቲማቲም ለብለብ", price: 180, badge: "Fasting", desc: "Sautéed fresh tomato salad with jalapenos and onions.", img: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19655?auto=format&fit=crop&w=600&q=80" },
+      { id: "l10", en: "Tmatim sils", am: "ቲማቲም ስልስ", price: 200, badge: "Fasting", desc: "Slow-cooked savory tomato gravy served hot.", img: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19655?auto=format&fit=crop&w=600&q=80" },
+      { id: "l11", en: "Firfir", am: "ፍርፍር", price: 200, desc: "Shredded injera soaked in spiced berbere onion stew.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
+      { id: "l12", en: "Firfir with egg", am: "ፍርፍር በእንቁላል", price: 250, desc: "Injera firfir topped with hard boiled or fried egg.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
+      { id: "l13", en: "Tibs firfir", am: "ጥብስ ፍርፍር", price: 350, badge: "Popular", desc: "Shredded injera mixed with tender sautéed beef tibs cubes.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+      { id: "l14", en: "Sega firfir", am: "ስጋ ፍርፍር", price: 320, desc: "Injera firfir stew cooked with savory beef pieces.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+      { id: "l15", en: "Quanta firfir", am: "ቐንጣ ፍርፍር", price: 420, desc: "Injera cooked with dried cured beef strips (quanta).", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+      { id: "l16", en: "Tibs", am: "ጥብስ", price: 450, badge: "Popular", desc: "Pan-fried beef cubes sautéed with onions, rosemary and green pepper.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+      { id: "l17", en: "Dulet", am: "ዱለት", price: 350, desc: "Finely minced beef, tripe and liver sautéed with kibbeh butter and chilli.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" }
     ]
   },
   {
-    id:'pizza', tab:'Pizza', en:'Pizza', am:'ፒዛ',
-    blurb:'Baked fresh, sliced and ready for the table.',
-    items:[
-      ['Special pizza','እስፔሻል ፒዛ',600],
-      ['4 saisons pizza','4 ሲዝን ፒዛ',700],
-      ['Margherita pizza','ማርጋሪታ ፒዛ',500],
-      ['Beef pizza','ቢፍ ፒዛ',550],
-      ['Tuna pizza','ቱና ፒዛ',580],
-      ['Veggie pizza','አትክልት ፒዛ',450],
+    category: "burgers",
+    catName: "Burgers & Wraps",
+    catAm: "በርገር እና ሸዋርማ",
+    icon: "🍔",
+    items: [
+      { id: "u1", en: "Special burger", am: "እስፔሻል በርገር", price: 600, badge: "Chef's Special", desc: "Juicy beef patty topped with melted cheese, fried egg, lettuce and house sauce.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
+      { id: "u2", en: "Double burger", am: "ደብል በርገር", price: 550, desc: "Two thick grilled beef patties layered with melted cheddar cheese.", img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" },
+      { id: "u3", en: "Beef burger", am: "ቢፍ በርገር", price: 450, badge: "Popular", desc: "Grilled beef patty with onions, pickles, tomato and soft burger bun.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
+      { id: "u4", en: "Chicken burger", am: "ቺክን በርገር", price: 600, desc: "Crispy fried or grilled chicken breast fillet with mayo lettuce.", img: "https://images.unsplash.com/photo-1615297928064-24977384d0da?auto=format&fit=crop&w=600&q=80" },
+      { id: "u5", en: "Cheesy burger", am: "ቺዝ በርገር", price: 500, desc: "Beef patty smothered with extra melted cheese slices.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
+      { id: "u6", en: "Beef wrap", am: "ቢፍ ሸዋርማ", price: 400, desc: "Seasoned grilled beef strips wrapped tightly in warm pita flatbread.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" },
+      { id: "u7", en: "Chicken wrap", am: "ቺክን ሸዋርማ", price: 500, desc: "Sliced garlic roasted chicken wrapped with veggies and cream sauce.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" },
+      { id: "u8", en: "Tuna wrap", am: "ቱና ሸዋርማ", price: 480, desc: "Seasoned tuna flakes with crunchy lettuce wrapped in flat bread.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" },
+      { id: "u9", en: "Veggie wrap", am: "አትክልት ሸዋርማ", price: 300, badge: "Fasting", desc: "Fresh avocado, grilled veggies and garlic spread wrapped in pita.", img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80" },
+      { id: "u10", en: "Special wrap", am: "እስፔሻል ሸዋርማ", price: 500, desc: "Meat, cheese and house sauce wrapped in grilled tortilla.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" }
     ]
   },
   {
-    id:'snacks', tab:'Snacks & extras', en:'Snacks and extras', am:'መክሰስ እና ጭማሪ',
-    blurb:'Small plates and add ons, for whenever you want a little more.',
-    groups:[
-      {h:'Snacks / መክሰስ', items:[
-        ['Sambusa','ሳምቡሳ',45],
-        ['Ertibe with pita','እርጥብ በቂጣ',200],
-        ['Special ertibe with pita','እስፔሻል እርጥብ በቂጣ',250],
-        ['French fries','ቺብስ',200],
-      ]},
-      {h:'Extras / ጭማሪ', items:[
-        ['Tuna extra','ቱና',100],
-        ['Egg extra','እንቁላል',50],
-        ['Ketchup','ካቻፕ',25],
-        ['Mayonnaise','ማዮኒዝ',50],
-        ['Honey','ማር',25],
-        ['Aluminium foil','አልሙኒም ፎይል',20],
-        ['Yoghurt','እርጎ',20],
-        ['Chilli','ዳጣ',20],
-        ['Syrup','ሲራፕ',25],
-        ['Bread','ዳቦ',20],
-        ['Burger takeaway box','የበርገር ቴካዌ ቦክስ',30],
-        ['Large takeaway cup','ቴካዌ ካፕ ትልቁ',25],
-        ['Coffee takeaway cup','ቴካዌ ካፕ የቡና',15],
-        ['Aluminium takeaway box','አልሙኒየም ቴካዌ ቦክስ',55],
-      ]}
+    category: "pizza",
+    catName: "Pizza",
+    catAm: "ፒዛ",
+    icon: "🍕",
+    items: [
+      { id: "p1", en: "Special pizza", am: "እስፔሻል ፒዛ", price: 600, badge: "Chef's Special", desc: "Loaded with beef, chicken, black olives, sweet peppers and extra mozzarella.", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" },
+      { id: "p2", en: "4 saisons pizza", am: "4 ሲዝን ፒዛ", price: 700, desc: "Four distinct sections: mushrooms, beef, olives, and fresh tomatoes.", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80" },
+      { id: "p3", en: "Margherita pizza", am: "ማርጋሪታ ፒዛ", price: 500, badge: "Popular", desc: "Classic stone-baked pizza topped with rich tomato sauce and basil mozzarella.", img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80" },
+      { id: "p4", en: "Beef pizza", am: "ቢፍ ፒዛ", price: 550, desc: "Savory minced beef topping over melted cheese and tomato base.", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" },
+      { id: "p5", en: "Tuna pizza", am: "ቱና ፒዛ", price: 580, desc: "Flaky tuna chunks with red onions and mozzarella cheese.", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" },
+      { id: "p6", en: "Veggie pizza", am: "አትክልት ፒዛ", price: 450, badge: "Fasting", desc: "Fasting friendly pizza with mushrooms, onions, bell peppers and olives.", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80" }
     ]
   },
   {
-    id:'coffee', tab:'Tea & coffee', en:'Tea and coffee', am:'ሻይ እና ቡና',
-    blurb:'This is what we are named for. Brewed slow, served warm.',
-    items:[
-      ['Coffee','ቡና',50],
-      ['Espresso','እስፕሬሶ',70],
-      ['Macchiato','ማኪያቶ',90],
-      ['Steamed milk with coffee','እስቲም ወተት በቡና',115],
-      ['Espresso shot','እስፕሪስ',50],
-      ['Milk','ወተት',95],
-      ['Black tea','ጥቁር ሻይ',40],
-      ['Lemon tea','ሻይ በሎሚ',50],
-      ['Cinnamon tea','ሻይ በቅመም',45],
-      ['Keshir','ቀሽር',50],
-      ['Hibiscus tea','ከርከዴ ሻይ',75],
+    category: "snacks",
+    catName: "Snacks & Extras",
+    catAm: "መክሰስ እና ጭማሪ",
+    icon: "🍿",
+    items: [
+      { id: "s1", en: "Sambusa", am: "ሳምቡሳ", price: 45, badge: "Popular", desc: "Crispy fried triangular pastry filled with spiced lentils or minced beef.", img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80" },
+      { id: "s2", en: "Ertibe with pita", am: "እርጥብ በቂጣ", price: 200, desc: "Traditional dip served with warm baked pita bread.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
+      { id: "s3", en: "Special ertibe with pita", am: "እስፔሻል እርጥብ በቂጣ", price: 250, desc: "Rich ertibe blend served with hot pita.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
+      { id: "s4", en: "French fries", am: "ቺብስ", price: 200, desc: "Golden salted crispy potato fries served with ketchup.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" },
+      { id: "s5", en: "Tuna extra", am: "ቱና", price: 100, desc: "Additional side portion of tuna.", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" },
+      { id: "s6", en: "Egg extra", am: "እንቁላል", price: 50, desc: "Extra boiled or fried egg.", img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80" },
+      { id: "s7", en: "Ketchup", am: "ካቻፕ", price: 25, desc: "Tomato ketchup portion.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" },
+      { id: "s8", en: "Mayonnaise", am: "ማዮኒዝ", price: 50, desc: "Creamy mayonnaise dip.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" },
+      { id: "s9", en: "Honey", am: "ማር", price: 25, desc: "Pure organic Ethiopian honey dip.", img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80" },
+      { id: "s10", en: "Aluminium foil", am: "አልሙኒም ፎይል", price: 20, desc: "Wrapping takeaway foil.", img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80" },
+      { id: "s11", en: "Yoghurt", am: "እርጎ", price: 20, desc: "Side plain yoghurt cup.", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" },
+      { id: "s12", en: "Chilli", am: "ዳጣ", price: 20, desc: "Spiced green chilli paste (data).", img: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19655?auto=format&fit=crop&w=600&q=80" },
+      { id: "s13", en: "Syrup", am: "ሲራፕ", price: 25, desc: "Sweet syrup topping.", img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80" },
+      { id: "s14", en: "Bread", am: "ዳቦ", price: 20, desc: "Extra slice of fresh bread.", img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" },
+      { id: "s15", en: "Takeaway boxes & cups", am: "ቴካዌ እቃዎች", price: 30, desc: "Takeaway packaging boxes and cups.", img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80" }
     ]
   },
   {
-    id:'cold', tab:'Cold drinks', en:'Cold drinks', am:'ቀዝቃዛ መጠጦች',
-    blurb:'Iced coffee and hibiscus, for warm afternoons.',
-    items:[
-      ['Iced coffee','አይስ ኮፊ',150],
-      ['Caramel iced coffee','ካራሜል አይስ ኮፊ',150],
-      ['Iced chocolate latte','አይስ ቸኮላት ላቴ',200],
-      ['Iced hibiscus tea','አይስ ከርከዴ',180],
+    category: "cold",
+    catName: "Cold Drinks",
+    catAm: "ቀዝቃዛ መጠጦች",
+    icon: "🧋",
+    items: [
+      { id: "d1", en: "Iced coffee", am: "አይስ ኮፊ", price: 150, badge: "Popular", desc: "Chilled dark roast coffee poured over ice cubes.", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80" },
+      { id: "d2", en: "Caramel iced coffee", am: "ካራሜል አይስ ኮፊ", price: 150, desc: "Iced coffee layered with buttery sweet caramel drizzle.", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=600&q=80" },
+      { id: "d3", en: "Iced chocolate latte", am: "አይስ ቸኮላት ላቴ", price: 200, desc: "Rich iced milk infused with Dutch cocoa chocolate.", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80" },
+      { id: "d4", en: "Iced hibiscus tea", am: "አይስ ከርከዴ", price: 180, desc: "Refreshing ice chilled ruby hibiscus blossom infusion.", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" }
     ]
   },
   {
-    id:'yoghurt', tab:'Yoghurt & soft drinks', en:'Yoghurt and soft drinks', am:'እርጎ እና ለስላሳ መጠጦች',
-    blurb:'A lighter option, and the usual bottled favourites.',
-    groups:[
-      {h:'Yoghurt / እርጎ', items:[
-        ['Yoghurt with honey','እርጎ በ ማር',150],
-        ['Yoghurt with red chilli','እርጎ በ ሚጥሚጣ',110],
-        ['Flax','ተልባ',130],
-        ['Flax mix with seasonal fruits','ተልባ በወተት',200],
-      ]},
-      {h:'Soft drinks / ለስላሳ መጠጦች', items:[
-        ['Novida','ኖቪዳ',60],
-        ['Ambo water','አምቦውሃ',60],
-        ['Fanta','ፋንታ',60],
-        ['Sprite','ስፕራይት',60],
-        ['Negus','ንጉስ',90],
-        ['Water, half litre','ውሃ 1/2',40],
-        ['Water, 1 litre','ውሃ 1L',50],
-        ['Water, 2 litre','ውሃ 2L',60],
-      ]}
+    category: "yoghurt",
+    catName: "Yoghurt & Soft Drinks",
+    catAm: "እርጎ እና ለስላሳ",
+    icon: "🥤",
+    items: [
+      { id: "y1", en: "Yoghurt with honey", am: "እርጎ በ ማር", price: 150, desc: "Creamy fresh yoghurt drizzled with pure Ethiopian honey.", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" },
+      { id: "y2", en: "Yoghurt with red chilli", am: "እርጎ በ ሚጥሚጣ", price: 110, desc: "Fresh yoghurt sprinkled with spicy mitmita pepper powder.", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" },
+      { id: "y3", en: "Flax", am: "ተልባ", price: 130, desc: "Healthy roasted flaxseed drink (telba).", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80" },
+      { id: "y4", en: "Flax mix with seasonal fruits", am: "ተልባ በወተት", price: 200, desc: "Flaxseed smoothie blended with fresh milk and fruit.", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80" },
+      { id: "y5", en: "Novida", am: "ኖቪዳ", price: 60, desc: "Bottled sparkling apple drink.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" },
+      { id: "y6", en: "Ambo water", am: "አምቦውሃ", price: 60, desc: "Naturally carbonated mineral water.", img: "https://images.unsplash.com/photo-1560023907-5f339617ea30?auto=format&fit=crop&w=600&q=80" },
+      { id: "y7", en: "Fanta / Sprite", am: "ፋንታ / ስፕራይት", price: 60, desc: "Chilled bottled soft drink.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" },
+      { id: "y8", en: "Negus", am: "ንጉስ", price: 90, desc: "Malt non-alcoholic beverage.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" },
+      { id: "y9", en: "Bottled mineral water", am: "ውሃ", price: 40, desc: "Pure spring drinking water (0.5L / 1L / 2L).", img: "https://images.unsplash.com/photo-1560023907-5f339617ea30?auto=format&fit=crop&w=600&q=80" }
     ]
   },
   {
-    id:'juices', tab:'Juices & mojito', en:'Fresh juices and mojito', am:'ፍሬሽ ጁስ እና ሞጂቶ',
-    blurb:'Pressed fruit and mint, for a clean finish to any meal.',
-    groups:[
-      {h:'Fresh juices / ፍሬሽ ጁስ', items:[
-        ['Mixed fruit','ሚክስድ',250],
-        ['Mango','ማንጎ',220],
-        ['Papaya','ፓፓያ',200],
-        ['Avocado','አቮካዶ',220],
-      ]},
-      {h:'Mojito / ሞጂቶ', items:[
-        ['Strawberry','እስትሮቨሪ',250],
-        ['Orange','ኦሬንጅ',250],
-        ['Mango','ማንጎ',250],
-        ['Mint','ሜንት',250],
-        ['Apple','አፕል',250],
-        ['Tropical blue','ትሮፒካል ብሉ',250],
-        ['Mango and coconut','ማንጎ እና ኮኮናት',250],
-        ['J Nat special','ጄ ናት እስፔሻል',250],
-      ]}
+    category: "juices",
+    catName: "Juices & Mojito",
+    catAm: "ፍሬሽ ጁስ እና ሞጂቶ",
+    icon: "🍹",
+    items: [
+      { id: "j1", en: "Mixed fruit juice", am: "ሚክስድ ጁስ", price: 250, badge: "Popular", desc: "Layered fresh smoothie of mango, papaya and avocado.", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80" },
+      { id: "j2", en: "Mango juice", am: "ማንጎ ጁስ", price: 220, desc: "Thick freshly squeezed organic tropical mango nectar.", img: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=600&q=80" },
+      { id: "j3", en: "Papaya juice", am: "ፓፓያ ጁስ", price: 200, desc: "Fresh sweet papaya smoothie with lime twist.", img: "https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=600&q=80" },
+      { id: "j4", en: "Avocado juice", am: "አቮካዶ ጁስ", price: 220, desc: "Rich creamy avocado smoothie served with fresh lemon juice.", img: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&w=600&q=80" },
+      { id: "j5", en: "Strawberry mojito", am: "እስትሮቨሪ ሞጂቶ", price: 250, desc: "Crushed fresh strawberries, mint, lime and sparkling soda over ice.", img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80" },
+      { id: "j6", en: "Orange mojito", am: "ኦሬንጅ ሞጂቶ", price: 250, desc: "Fresh citrus orange crushed with spearmint and soda.", img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80" },
+      { id: "j7", en: "Mint mojito", am: "ሜንት ሞጂቶ", price: 250, desc: "Classic ice cold mint and fresh lime virgin cocktail.", img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80" },
+      { id: "j8", en: "Tropical blue", am: "ትሮፒካል ብሉ", price: 250, badge: "Special", desc: "Exotic blue curaçao citrus mocktail served chilled.", img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" },
+      { id: "j9", en: "Mango and coconut", am: "ማንጎ እና ኮኮናት", price: 250, desc: "Creamy coconut milk blended with ripe tropical mangoes.", img: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=600&q=80" },
+      { id: "j10", en: "J Nat special", am: "ጄ ናት እስፔሻል", price: 250, badge: "Chef's Special", desc: "Our signature house blend fruit mocktail topped with crushed mint.", img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" }
     ]
-  },
-  {
-    id:'back', tab:'Closing', kind:'back'
   }
 ];
 
-/* ---------- Build page HTML ---------- */
-function renderMenuBody(section){
-  let html = '';
-  if(section.blurb){
-    html += `<p class="blurb">${section.blurb}</p>`;
-  }
-  if(section.items){
-    html += '<div class="menu-list">';
-    section.items.forEach(([en,am,price])=>{
-      html += `<div class="menu-item"><div class="name"><span class="en">${en}</span><span class="am">${am}</span></div><div class="price">${price}</div></div>`;
+/* State Variables */
+let currentCategory = "all";
+let searchKeyword = "";
+let cart = {}; // { itemId: quantity }
+let currentModalItem = null;
+let currentModalQty = 1;
+
+/* Initialization */
+document.addEventListener("DOMContentLoaded", () => {
+  renderCategoryStrip();
+  renderMenu();
+  setupEvents();
+});
+
+/* Render Category Strip */
+function renderCategoryStrip() {
+  const strip = document.getElementById("categoryStrip");
+  let html = `<button class="cat-btn active" data-cat="all" onclick="selectCategory('all', this)">✨ All Items</button>`;
+  menuData.forEach(cat => {
+    html += `<button class="cat-btn" data-cat="${cat.category}" onclick="selectCategory('${cat.category}', this)"><span>${cat.icon}</span> ${cat.catName}</button>`;
+  });
+  strip.innerHTML = html;
+}
+
+/* Category Selection */
+function selectCategory(catId, btnEl) {
+  currentCategory = catId;
+  document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+  btnEl.classList.add("active");
+  btnEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  renderMenu();
+}
+
+/* Render Main Menu Grid */
+function renderMenu() {
+  const container = document.getElementById("mainContent");
+  let html = "";
+  let totalDisplayed = 0;
+
+  const filteredCategories = menuData.filter(cat => currentCategory === "all" || cat.category === currentCategory);
+
+  filteredCategories.forEach(cat => {
+    // Filter items inside category based on search keyword
+    const matchingItems = cat.items.filter(item => {
+      if (!searchKeyword) return true;
+      const kw = searchKeyword.toLowerCase();
+      return item.en.toLowerCase().includes(kw) || item.am.includes(kw) || item.price.toString().includes(kw);
     });
-    html += '</div>';
-  } else if (section.groups){
-    html += '<div class="menu-list">';
-    section.groups.forEach(g=>{
-      html += `<div class="subhead">${g.h}</div>`;
-      g.items.forEach(([en,am,price])=>{
-        html += `<div class="menu-item"><div class="name"><span class="en">${en}</span><span class="am">${am}</span></div><div class="price">${price}</div></div>`;
+
+    if (matchingItems.length > 0) {
+      totalDisplayed += matchingItems.length;
+      html += `
+        <div class="section-title">
+          <h2>${cat.icon} ${cat.catName}</h2>
+          <span class="am-sub amharic">${cat.catAm}</span>
+        </div>
+        <div class="menu-grid">
+      `;
+
+      matchingItems.forEach(item => {
+        const badgeHtml = item.badge ? `<div class="card-badge">${item.badge}</div>` : "";
+        html += `
+          <div class="card" onclick="openDetailModal('${item.id}')">
+            <div class="card-img-wrap">
+              <img src="${item.img}" class="card-img" alt="${item.en}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=300&q=80'">
+              ${badgeHtml}
+            </div>
+            <div class="card-body">
+              <div>
+                <div class="card-title-en">${item.en}</div>
+                <div class="card-title-am amharic">${item.am}</div>
+              </div>
+              <div class="card-footer">
+                <div class="card-price">${item.price}</div>
+                <button class="add-btn" onclick="event.stopPropagation(); quickAddToCart('${item.id}')" title="Add to Order">+</button>
+              </div>
+            </div>
+          </div>
+        `;
       });
-    });
-    html += '</div>';
-  }
-  return html;
-}
 
-function buildPageContent(section){
-  if(section.kind === 'cover'){
-    return `<div class="page-inner cover-face">
-      <div class="brandmark"><svg viewBox="0 0 100 100"><path d="M24 38 L70 38 L66 72 Q66 80 50 80 Q34 80 30 72 Z"/><path d="M70 42 Q86 42 86 54 Q86 64 70 64"/></svg></div>
-      <h1>J Nat Coffee</h1>
-      <div class="amharic">ጄ ናት ቡና</div>
-      <div class="tag">Koye &middot; Est. menu</div>
-      <div class="hint">Tap or swipe to begin</div>
-    </div>`;
-  }
-  if(section.kind === 'back'){
-    return `<div class="page-inner back-face">
-      <h2 style="color:var(--cream); margin-bottom:10px;">Thank you for coming</h2>
-      <div class="hours">Open daily, 8 AM to 9 PM &middot; Addis Ababa</div>
-      <div style="display:flex; flex-direction:column; gap:8px; color:#D8C9AE; font-size:0.8rem; margin-bottom:22px;">
-        <div>CBE &middot; 1000641332837</div>
-        <div>BOA &middot; 200756002</div>
-        <div>Telebirr &middot; 0908488848</div>
+      html += `</div>`;
+    }
+  });
+
+  if (totalDisplayed === 0) {
+    html = `
+      <div class="empty-search">
+        <svg viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <h3>No matching items found</h3>
+        <p style="margin-top:6px; font-size:0.85rem;">Try searching for something else like "Coffee", "Shiro", or "Burger"</p>
       </div>
-      <div class="made-by">Made by <a href="https://emberstudios.vercel.app/" target="_blank" rel="noopener">Ember Studios</a></div>
-    </div>`;
+    `;
   }
-  if(section.kind === 'contents'){
-    let rows = sections
-      .filter(s=>!['cover','contents','back','payments'].includes(s.kind))
-      .map((s,i)=>`<li><span>${s.en}</span><span class="no">${String(i+1).padStart(2,'0')}</span></li>`).join('');
-    return `<div class="page-inner">
-      <div class="page-head"><h2>Contents</h2><span class="amharic">ማውጫ</span></div>
-      <ul class="contents-list">${rows}</ul>
-    </div>`;
-  }
-  return `<div class="page-inner">
-    <div class="page-head"><h2>${section.en}</h2><span class="amharic">${section.am}</span></div>
-    ${renderMenuBody(section)}
-  </div>`;
+
+  container.innerHTML = html;
 }
 
-const pages = sections.map(s => ({ id:s.id, html: buildPageContent(s) }));
-const totalPages = pages.length;
+/* Event Handlers */
+function setupEvents() {
+  const searchInput = document.getElementById("searchInput");
+  const clearBtn = document.getElementById("clearSearchBtn");
 
-/* ---------- Responsive pagination -----------
-   Desktop / tablet: two pages per leaf (a real book spread).
-   Phones: one page per leaf, full width, so each page is easy to read. */
-function isPhone(){ return window.matchMedia('(max-width:760px)').matches; }
-
-let perLeaf = isPhone() ? 1 : 2;
-let leafCount = perLeaf === 2 ? Math.ceil(totalPages/2) : totalPages;
-let current = 0; // number of leaves flipped
-let leafEls = [];
-
-const spreadHost = document.getElementById('spreadHost');
-
-function buildLeaves(){
-  perLeaf = isPhone() ? 1 : 2;
-  leafCount = perLeaf === 2 ? Math.ceil(totalPages/2) : totalPages;
-
-  let leavesHtml = '';
-  for(let k=0;k<leafCount;k++){
-    const frontIdx = perLeaf === 2 ? k*2 : k;
-    const backIdx  = perLeaf === 2 ? k*2+1 : Math.min(k+1, totalPages-1);
-    const frontHtml = pages[frontIdx] ? pages[frontIdx].html : `<div class="page-inner cover-face"></div>`;
-    const backHtml = pages[backIdx] ? pages[backIdx].html : `<div class="page-inner cover-face"></div>`;
-    leavesHtml += `
-      <div class="leaf right" data-leaf="${k}" style="z-index:${(leafCount-k)*10+5}">
-        <div class="face front">${frontHtml}<div class="page-num">${frontIdx+1}</div></div>
-        <div class="face back">${backHtml}<div class="page-num">${backIdx+1 <= totalPages ? backIdx+1 : ''}</div></div>
-      </div>`;
-  }
-  spreadHost.innerHTML = `<div class="spread">${leavesHtml}</div>`;
-  leafEls = Array.from(document.querySelectorAll('.leaf'));
-}
-
-function applyState(){
-  leafEls.forEach((leaf, idx)=>{
-    if(idx < current){
-      leaf.classList.add('flip-right');
-      leaf.style.zIndex = idx * 10 + 1;
-    } else {
-      leaf.classList.remove('flip-right');
-      leaf.style.zIndex = (leafCount - idx) * 10 + 5;
-    }
+  searchInput.addEventListener("input", (e) => {
+    searchKeyword = e.target.value.trim();
+    clearBtn.style.display = searchKeyword ? "block" : "none";
+    renderMenu();
   });
-  document.getElementById('prevBtn').classList.toggle('disabled', current<=0);
-  document.getElementById('nextBtn').classList.toggle('disabled', current>=leafCount);
 
-  const rightPageVisible = perLeaf === 2 ? current*2 + 1 : current + 1;
-  document.getElementById('progress').textContent = `${Math.min(rightPageVisible, totalPages)} / ${totalPages}`;
-
-  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
-  const activeSectionIdx = perLeaf === 2 ? Math.min(current*2, totalPages-1) : Math.min(current, totalPages-1);
-  const activeId = pages[activeSectionIdx] ? pages[activeSectionIdx].id : null;
-  const tabBtn = document.querySelector(`.tabs button[data-id="${activeId}"]`);
-  if(tabBtn){
-    tabBtn.classList.add('active');
-    centerTabInStrip(tabBtn);
-  }
-}
-
-function centerTabInStrip(btn){
-  const strip = tabsHost;
-  if(!strip || strip.scrollWidth <= strip.clientWidth) return; // nothing to scroll, leave it alone
-  const target = btn.offsetLeft - (strip.clientWidth/2) + (btn.clientWidth/2);
-  const max = strip.scrollWidth - strip.clientWidth;
-  strip.scrollTo({ left: Math.max(0, Math.min(target, max)), behavior:'smooth' });
-}
-
-function flagTurning(leaf){
-  leaf.classList.add('turning');
-  setTimeout(()=> leaf.classList.remove('turning'), 900);
-}
-
-function getFlipMs(){
-  const sample = document.querySelector('.leaf');
-  if(!sample) return 860;
-  const dur = getComputedStyle(sample).transitionDuration.split(',')[0].trim();
-  const ms = dur.endsWith('ms') ? parseFloat(dur) : parseFloat(dur) * 1000;
-  return (isFinite(ms) && ms > 0) ? ms + 10 : 860; // +10ms safety margin
-}
-
-function next(){
-  if(current < leafCount){
-    const idx = current;
-    const leaf = leafEls[idx];
-    flagTurning(leaf);
-    current++;
-    applyState();
-    // pin this leaf above the whole stack for the duration of its own flip,
-    // then let it settle to its resting (flipped) z-index — without this,
-    // applyState's immediate z-index reassignment makes the leaf duck behind
-    // neighboring pages partway through the rotation, and how far depends on
-    // the stack gap at that particular page index, which is why it looked
-    // inconsistent from page to page.
-    leaf.style.zIndex = 9999;
-    clearTimeout(leaf._zTimer);
-    leaf._zTimer = setTimeout(()=>{ leaf.style.zIndex = idx * 10 + 1; }, getFlipMs());
-  }
-}
-function prev(){
-  if(current > 0){
-    current--;
-    const idx = current;
-    const leaf = leafEls[idx];
-    flagTurning(leaf);
-    applyState();
-    leaf.style.zIndex = 9999;
-    clearTimeout(leaf._zTimer);
-    leaf._zTimer = setTimeout(()=>{ leaf.style.zIndex = (leafCount - idx) * 10 + 5; }, getFlipMs());
-  }
-}
-
-document.getElementById('nextBtn').addEventListener('click', next);
-document.getElementById('prevBtn').addEventListener('click', prev);
-document.getElementById('czRight').addEventListener('click', next);
-document.getElementById('czLeft').addEventListener('click', prev);
-
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'ArrowRight') next();
-  if(e.key === 'ArrowLeft') prev();
-});
-
-/* ---------- Touch swipe support (essential on phones) ---------- */
-let touchStartX = null;
-let touchStartY = null;
-const bookEl = document.getElementById('book');
-
-bookEl.addEventListener('touchstart', (e)=>{
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-}, { passive:true });
-
-bookEl.addEventListener('touchend', (e)=>{
-  if(touchStartX === null) return;
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  const dy = e.changedTouches[0].clientY - touchStartY;
-  if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)*1.5){
-    if(dx < 0) next(); else prev();
-  }
-  touchStartX = null; touchStartY = null;
-}, { passive:true });
-
-/* ---------- Tabs ---------- */
-const tabsHost = document.getElementById('tabs');
-sections.forEach((s, i)=>{
-  if(s.kind === 'back' || s.kind === 'payments') return;
-  const btn = document.createElement('button');
-  btn.textContent = s.tab;
-  btn.dataset.id = s.id;
-  btn.addEventListener('click', ()=>{
-    const pageIdx = i;
-    if(perLeaf === 2){
-      current = pageIdx % 2 === 0 ? pageIdx/2 : Math.ceil(pageIdx/2);
-    } else {
-      current = pageIdx;
-    }
-    leafEls.forEach(leaf=>{ clearTimeout(leaf._zTimer); leaf.style.zIndex = ''; });
-    applyState();
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    searchKeyword = "";
+    clearBtn.style.display = "none";
+    renderMenu();
   });
-  tabsHost.appendChild(btn);
-});
-
-/* ---------- Init + responsive rebuild ---------- */
-function rebuildPreservingPosition(){
-  // figure out which page index is currently "active" before rebuilding
-  const activePage = perLeaf === 2 ? Math.min(current*2, totalPages-1) : Math.min(current, totalPages-1);
-  buildLeaves();
-  current = perLeaf === 2 ? Math.floor(activePage/2) : activePage;
-  applyState();
 }
 
-let resizeTimer = null;
-window.addEventListener('resize', ()=>{
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(()=>{
-    const wantPhone = isPhone();
-    if((wantPhone && perLeaf !== 1) || (!wantPhone && perLeaf !== 2)){
-      rebuildPreservingPosition();
+/* Search Helper */
+function getItemById(id) {
+  for (const cat of menuData) {
+    const item = cat.items.find(i => i.id === id);
+    if (item) return item;
+  }
+  return null;
+}
+
+/* Quick Add */
+function quickAddToCart(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  updateOrderBar();
+}
+
+/* Update Order Calculator Bar */
+function updateOrderBar() {
+  const orderBar = document.getElementById("orderBar");
+  let totalCount = 0;
+  let totalPrice = 0;
+
+  for (const [id, qty] of Object.entries(cart)) {
+    if (qty > 0) {
+      const item = getItemById(id);
+      if (item) {
+        totalCount += qty;
+        totalPrice += item.price * qty;
+      }
     }
-  }, 200);
-});
+  }
 
-buildLeaves();
-applyState();
+  document.getElementById("orderCount").textContent = totalCount;
+  document.getElementById("orderTotal").textContent = `${totalPrice} ETB`;
 
-/* brief swipe hint for first-time touch users */
-if(isPhone() && 'ontouchstart' in window){
-  setTimeout(()=>{
-    const hint = document.getElementById('swipeHint');
-    hint.classList.add('show');
-  }, 1200);
+  if (totalCount > 0) {
+    orderBar.classList.add("show");
+  } else {
+    orderBar.classList.remove("show");
+  }
+}
+
+/* Modal Controller */
+function openDetailModal(id) {
+  const item = getItemById(id);
+  if (!item) return;
+  currentModalItem = item;
+  currentModalQty = 1;
+
+  document.getElementById("modalImg").src = item.img;
+  document.getElementById("modalTitle").textContent = item.en;
+  document.getElementById("modalAmharic").textContent = item.am;
+  document.getElementById("modalDesc").textContent = item.desc || "Prepared fresh upon ordering.";
+  document.getElementById("modalPrice").textContent = `${item.price} ETB`;
+  document.getElementById("modalQtyNum").textContent = currentModalQty;
+
+  document.getElementById("detailModal").classList.add("active");
+}
+
+function changeModalQty(delta) {
+  currentModalQty = Math.max(1, currentModalQty + delta);
+  document.getElementById("modalQtyNum").textContent = currentModalQty;
+}
+
+function addModalItemToCart() {
+  if (currentModalItem) {
+    cart[currentModalItem.id] = (cart[currentModalItem.id] || 0) + currentModalQty;
+    updateOrderBar();
+    closeModal("detailModal");
+  }
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove("active");
+}
+
+/* Cart Modal */
+function openCartModal() {
+  const cartList = document.getElementById("cartItemsList");
+  let html = "";
+  let totalPrice = 0;
+
+  let hasItems = false;
+  for (const [id, qty] of Object.entries(cart)) {
+    if (qty > 0) {
+      hasItems = true;
+      const item = getItemById(id);
+      if (item) {
+        const itemTotal = item.price * qty;
+        totalPrice += itemTotal;
+        html += `
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px dotted var(--line-soft);">
+            <div>
+              <div style="font-weight:600; font-size:0.92rem;">${item.en}</div>
+              <div style="font-size:0.78rem; color:var(--clay);" class="amharic">${item.am}</div>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">${item.price} ETB &times; ${qty} = <span style="color:var(--gold);">${itemTotal} ETB</span></div>
+            </div>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="updateCartQty('${id}', -1)">-</button>
+              <span class="qty-num">${qty}</span>
+              <button class="qty-btn" onclick="updateCartQty('${id}', 1)">+</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+  }
+
+  if (!hasItems) {
+    html = `<div style="text-align:center; padding:20px; color:var(--text-muted);">Your table order is empty</div>`;
+  }
+
+  cartList.innerHTML = html;
+  document.getElementById("cartModalTotal").textContent = `${totalPrice} ETB`;
+  document.getElementById("cartModal").classList.add("active");
+}
+
+function updateCartQty(id, delta) {
+  if (cart[id]) {
+    cart[id] += delta;
+    if (cart[id] <= 0) delete cart[id];
+  }
+  updateOrderBar();
+  openCartModal(); // Refresh cart modal
+}
+
+/* Helper copy text */
+function copyText(txt) {
+  navigator.clipboard.writeText(txt).then(() => {
+    alert("Copied account number: " + txt);
+  }).catch(() => {
+    prompt("Copy account number:", txt);
+  });
 }
 </script>
 </body>
 </html>
-
