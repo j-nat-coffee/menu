@@ -45,6 +45,80 @@
     font-family: 'Noto Serif Ethiopic', serif;
   }
 
+  /* Splash Screen */
+  .splash-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: radial-gradient(circle at center, #2C1B10 0%, #120D0A 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+
+  .splash-overlay.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .splash-logo-wrap {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    overflow: hidden;
+    box-shadow: 0 0 35px rgba(212, 175, 55, 0.4);
+    margin-bottom: 20px;
+    animation: splashPulse 2s infinite ease-in-out;
+  }
+
+  @keyframes splashPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(212, 175, 55, 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 0 45px rgba(212, 175, 55, 0.6); }
+  }
+
+  .splash-logo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .splash-title-am {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .splash-welcome-am {
+    font-size: 1.15rem;
+    color: var(--clay);
+    margin-bottom: 24px;
+    line-height: 1.4;
+    max-width: 320px;
+  }
+
+  .splash-enter-btn {
+    background: linear-gradient(135deg, var(--gold), var(--clay));
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 99px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-glow);
+    transition: transform 0.2s ease;
+  }
+
+  .splash-enter-btn:active { transform: scale(0.95); }
+
   /* Header Branding */
   .app-header {
     position: sticky;
@@ -252,7 +326,7 @@
     }
   }
 
-  /* Card Component - Rich Edge-to-Edge Cover */
+  /* Card Component */
   .card {
     background: var(--bg-card);
     border: 1px solid var(--line-soft);
@@ -280,7 +354,7 @@
   .card-img-wrap {
     position: relative;
     width: 100%;
-    height: 140px; /* Fixed height for clean, edge-to-edge card cover */
+    height: 140px;
     background: #18110B;
     overflow: hidden;
   }
@@ -288,7 +362,7 @@
   .card-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Fills card completely edge-to-edge! */
+    object-fit: cover;
     object-position: center center;
     transition: transform 0.4s ease;
   }
@@ -521,7 +595,7 @@
   .modal-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Fills modal richly edge-to-edge! */
+    object-fit: cover;
     object-position: center center;
   }
 
@@ -611,6 +685,34 @@
     border: 1px solid var(--line);
   }
 
+  /* Developer Team Footer */
+  .developer-footer {
+    text-align: center;
+    padding: 30px 16px 20px;
+    border-top: 1px solid var(--line-soft);
+    margin-top: 35px;
+  }
+
+  .developer-lbl {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .developer-logo-img {
+    max-width: 180px;
+    max-height: 55px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 10px rgba(0,0,0,0.6));
+    transition: transform 0.3s ease;
+  }
+
+  .developer-logo-img:hover {
+    transform: scale(1.05);
+  }
+
   .empty-search {
     text-align: center;
     padding: 50px 20px;
@@ -622,6 +724,16 @@
 </style>
 </head>
 <body>
+
+  <!-- Splash Screen Overlay -->
+  <div class="splash-overlay" id="splashScreen" onclick="dismissSplash()">
+    <div class="splash-logo-wrap">
+      <img src="logo.png" alt="J Nat Coffee Logo" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80'">
+    </div>
+    <div class="splash-title-am amharic">ጄ ናት ቡና</div>
+    <div class="splash-welcome-am amharic">እንኳን በደህና ወደ ጄ ናት ቡና መጡ!</div>
+    <button class="splash-enter-btn" onclick="dismissSplash()">ወደ ማውጫው ይግቡ &rarr;</button>
+  </div>
 
   <!-- App Header -->
   <header class="app-header">
@@ -653,7 +765,7 @@
   <!-- Main Menu Grid Container -->
   <main class="main-content" id="mainContent"></main>
 
-  <!-- Payment Card Footer -->
+  <!-- Payment Card Footer & Developer Credit -->
   <div class="main-content">
     <div class="payment-card">
       <div class="payment-title">💳 Direct Payment Accounts</div>
@@ -669,6 +781,12 @@
         <div><strong>Telebirr</strong></div>
         <div class="copy-tag" onclick="copyText('0908488848')">0908488848 📋</div>
       </div>
+    </div>
+
+    <!-- Developer Logo Footer -->
+    <div class="developer-footer">
+      <div class="developer-lbl">Developed with ❤️ by</div>
+      <img src="developer_logo.png" alt="Developer Team Logo" class="developer-logo-img">
     </div>
   </div>
 
@@ -726,7 +844,21 @@
   </div>
 
 <script>
-/* Menu Database with rich edge-to-edge food photos */
+/* Splash Screen Auto-Dismiss */
+let splashDismissed = false;
+function dismissSplash() {
+  if (splashDismissed) return;
+  splashDismissed = true;
+  const splash = document.getElementById("splashScreen");
+  if (splash) splash.classList.add("fade-out");
+}
+
+// Auto dismiss splash screen after 2.8 seconds
+setTimeout(() => {
+  dismissSplash();
+}, 2800);
+
+/* Menu Database with User's Custom Food Photos */
 const menuData = [
   {
     category: "coffee",
@@ -736,15 +868,15 @@ const menuData = [
     items: [
       { id: "c1", en: "Coffee", am: "ቡና", price: 50, badge: "Signature", desc: "Freshly roasted Ethiopian highlands coffee brewed slow in traditional jebena style.", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" },
       { id: "c2", en: "Espresso", am: "እስፕሬሶ", price: 70, desc: "Rich and intense shot of pure concentrated dark roast coffee.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" },
-      { id: "c3", en: "Macchiato", am: "ማኪያቶ", price: 90, badge: "Popular", desc: "Espresso layered with velvety steamed milk foam.", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80", imgPos: "center center" },
+      { id: "c3", en: "Macchiato", am: "ማኪያቶ", price: 90, badge: "Popular", desc: "Espresso layered with velvety steamed milk foam.", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80" },
       { id: "c4", en: "Steamed milk with coffee", am: "እስቲም ወተት በቡና", price: 115, desc: "Warm steamed milk gently infused with aromatic coffee.", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80" },
       { id: "c5", en: "Espresso shot", am: "እስፕሪስ", price: 50, desc: "Extra energizing single espresso shot.", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80" },
       { id: "c6", en: "Milk", am: "ወተት", price: 95, desc: "Fresh steamed whole milk.", img: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80" },
       { id: "c7", en: "Black tea", am: "ጥቁር ሻይ", price: 40, desc: "Steeped premium black tea leaves served warm.", img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80" },
       { id: "c8", en: "Lemon tea", am: "ሻይ በሎሚ", price: 50, desc: "Invigorating black tea steeped with fresh citrus lemon slice.", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" },
       { id: "c9", en: "Cinnamon tea", am: "ሻይ በቅመም", price: 45, desc: "Warm spiced tea blended with fragrant cinnamon bark.", img: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=600&q=80" },
-      { id: "c10", en: "Keshir", am: "ቀሽር", price: 50, desc: "Traditional comforting spiced ginger and husk tea.", img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80" },
-      { id: "c11", en: "Hibiscus tea", am: "ከርከዴ ሻይ", price: 75, desc: "Ruby red tart infusion of dried hibiscus flowers.", img: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=600&q=80" }
+      { id: "c10", en: "Keshir", am: "ቀሽር", price: 50, desc: "Traditional comforting spiced ginger and husk tea.", img: "images/keshir.jpg" },
+      { id: "c11", en: "Hibiscus tea", am: "ከርከዴ ሻይ", price: 75, desc: "Ruby red tart infusion of dried hibiscus flowers.", img: "images/hibiscus tea.jpg" }
     ]
   },
   {
@@ -753,26 +885,26 @@ const menuData = [
     catAm: "ቁርስ",
     icon: "🍳",
     items: [
-      { id: "b1", en: "Scrambled egg", am: "እንቁላል ፍርፍር", price: 220, desc: "Fluffy scrambled eggs prepared with onions, tomatoes and green chillies served with warm toast.", img: "images/scrambled_egg.jpg", imgPos: "center center" },
-      { id: "b2", en: "Scrambled egg with meat", am: "እንቁላል ፍርፍር በስጋ", price: 320, badge: "Popular", desc: "Savory scrambled eggs sautéed with tender seasoned meat strips.", img: "images/scrambled_egg_with_meat.jpg", imgPos: "center center" },
-      { id: "b3", en: "Egg sauce", am: "እንቁላል ስልስ", price: 270, desc: "Poached eggs simmered in rich spiced tomato-onion stew.", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=600&q=80" },
-      { id: "b4", en: "Fool", am: "ፉል", price: 170, desc: "Warm crushed fava beans seasoned with berbere, oil and herbs.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
-      { id: "b5", en: "Fool with tuna", am: "ፉል በ ቱና", price: 250, desc: "Traditional fava bean dish topped with seasoned tuna chunks.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
-      { id: "b6", en: "Special fool", am: "እስፔሻል ፉል", price: 220, badge: "Chef's Special", desc: "Rich fava bean dish topped with boiled egg, butter, yogurt and tomatoes.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
-      { id: "b7", en: "Chechebesa", am: "ጨጨብሳ", price: 200, badge: "Popular", desc: "Shredded flatbread cooked in spiced niter kibbeh butter and berbere.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" },
-      { id: "b8", en: "Special chechebesa", am: "እስፔሻል ጨጨብሳ", price: 270, badge: "Chef's Special", desc: "Chechebesa enriched with honey and fried egg on top.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" },
-      { id: "b9", en: "Special sandwich", am: "እስፔሻል ሳንድዊች", price: 400, desc: "Double layer crusty loaf filled with cheese, meat, egg and veggies.", img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80" },
-      { id: "b10", en: "Egg sandwich", am: "እንቁላል ሳንድዊች", price: 270, desc: "Fresh bread stuffed with seasoned fried eggs and crisp tomatoes.", img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80" },
-      { id: "b11", en: "Tuna sandwich", am: "ቱና ሳንድዊች", price: 350, desc: "Seasoned tuna salad filling with fresh lettuce and mayo.", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" },
-      { id: "b12", en: "Chicken sandwich", am: "ቺክን ሳንድዊች", price: 450, desc: "Grilled chicken fillet on artisan bread with light sauce.", img: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=600&q=80" },
-      { id: "b13", en: "Veggie sandwich", am: "አትክልት ሳንድዊች", price: 300, badge: "Fasting", desc: "Fresh avocado, tomatoes, cucumber and lettuce in oven bread.", img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80" },
-      { id: "b14", en: "Club sandwich", am: "ክለብ ሳንድዊች", price: 500, desc: "Triple decker toasted sandwich served with French fries.", img: "https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=600&q=80" },
+      { id: "b1", en: "Scrambled egg", am: "እንቁላል ፍርፍር", price: 220, desc: "Fluffy scrambled eggs prepared with onions, tomatoes and green chillies served with warm toast.", img: "images/scrambled_egg.jpg" },
+      { id: "b2", en: "Scrambled egg with meat", am: "እንቁላል ፍርፍር በስጋ", price: 320, badge: "Popular", desc: "Savory scrambled eggs sautéed with tender seasoned meat strips.", img: "images/scrambled_egg_with_meat.jpg" },
+      { id: "b3", en: "Egg sauce", am: "እንቁላል ስልስ", price: 270, desc: "Poached eggs simmered in rich spiced tomato-onion stew.", img: "images/egg-sauce.jpg" },
+      { id: "b4", en: "Fool", am: "ፉል", price: 170, desc: "Warm crushed fava beans seasoned with berbere, oil and herbs.", img: "images/fool.jpg" },
+      { id: "b5", en: "Fool with tuna", am: "ፉል በ ቱና", price: 250, desc: "Traditional fava bean dish topped with seasoned tuna chunks.", img: "images/fool with tuna.jpg" },
+      { id: "b6", en: "Special fool", am: "እስፔሻል ፉል", price: 220, badge: "Chef's Special", desc: "Rich fava bean dish topped with boiled egg, butter, yogurt and tomatoes.", img: "images/special fool.jpg" },
+      { id: "b7", en: "Chechebesa", am: "ጨጨብሳ", price: 200, badge: "Popular", desc: "Shredded flatbread cooked in spiced niter kibbeh butter and berbere.", img: "images/Chechebesa.jpg" },
+      { id: "b8", en: "Special chechebesa", am: "እስፔሻል ጨጨብሳ", price: 270, badge: "Chef's Special", desc: "Chechebesa enriched with honey and fried egg on top.", img: "images/special chechebesa.jpg" },
+      { id: "b9", en: "Special sandwich", am: "እስፔሻል ሳንድዊች", price: 400, desc: "Double layer crusty loaf filled with cheese, meat, egg and veggies.", img: "images/egg sandwitch.jpg" },
+      { id: "b10", en: "Egg sandwich", am: "እንቁላል ሳንድዊች", price: 270, desc: "Fresh bread stuffed with seasoned fried eggs and crisp tomatoes.", img: "images/egg sandwitch.jpg" },
+      { id: "b11", en: "Tuna sandwich", am: "ቱና ሳንድዊች", price: 350, desc: "Seasoned tuna salad filling with fresh lettuce and mayo.", img: "images/veggie sandwitch.jpg" },
+      { id: "b12", en: "Chicken sandwich", am: "ቺክን ሳንድዊች", price: 450, desc: "Grilled chicken fillet on artisan bread with light sauce.", img: "images/veggie sandwitch.jpg" },
+      { id: "b13", en: "Veggie sandwich", am: "አትክልት ሳንድዊች", price: 300, badge: "Fasting", desc: "Fresh avocado, tomatoes, cucumber and lettuce in oven bread.", img: "images/veggie sandwitch.jpg" },
+      { id: "b14", en: "Club sandwich", am: "ክለብ ሳንድዊች", price: 500, desc: "Triple decker toasted sandwich served with French fries.", img: "images/veggie sandwitch.jpg" },
       { id: "b15", en: "Waffle", am: "ዋፍል", price: 300, desc: "Golden crispy Belgian waffle served warm with syrup or honey.", img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=600&q=80" },
-      { id: "b16", en: "French toast", am: "ፍሬንች ቶስት", price: 300, desc: "Pan-fried egg-soaked thick brioche toast sprinkled with sweet cinnamon.", img: "https://images.unsplash.com/photo-1484723091479-0097771360da?auto=format&fit=crop&w=600&q=80" },
-      { id: "b17", en: "Kinche", am: "ቅንጭ", price: 300, desc: "Cracked wheat cereal cooked in spiced butter or oil.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
-      { id: "b18", en: "Fasting fetira", am: "የፆም ፈጢራ", price: 350, badge: "Fasting", desc: "Crispy layered pastry served with pure Ethiopian honey.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" },
-      { id: "b19", en: "Fetira with egg", am: "ፈጢራ በ እንቁላል", price: 350, desc: "Flaky fetira flatbread folded over seasoned fried egg.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" },
-      { id: "b20", en: "Special fetira", am: "እስፔሻል ፈጢራ", price: 420, desc: "Fetira filled with egg and honey combination.", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80" }
+      { id: "b16", en: "French toast", am: "ፍሬንች ቶስት", price: 300, desc: "Pan-fried egg-soaked thick brioche toast sprinkled with sweet cinnamon.", img: "images/french toast.jpg" },
+      { id: "b17", en: "Kinche", am: "ቅንጭ", price: 300, desc: "Cracked wheat cereal cooked in spiced butter or oil.", img: "images/kinche.jpg" },
+      { id: "b18", en: "Fasting fetira", am: "የፆም ፈጢራ", price: 350, badge: "Fasting", desc: "Crispy layered pastry served with pure Ethiopian honey.", img: "images/fetira.jpg" },
+      { id: "b19", en: "Fetira with egg", am: "ፈጢራ በ እንቁላል", price: 350, desc: "Flaky fetira flatbread folded over seasoned fried egg.", img: "images/fetira with egg.jpg" },
+      { id: "b20", en: "Special fetira", am: "እስፔሻል ፈጢራ", price: 420, desc: "Fetira filled with egg and honey combination.", img: "images/special fetira.jpg" }
     ]
   },
   {
@@ -781,23 +913,23 @@ const menuData = [
     catAm: "ምሳ",
     icon: "🍲",
     items: [
-      { id: "l1", en: "Bozena shiro", am: "ቦዘና ሽሮ", price: 350, badge: "Popular", desc: "Rich chickpea flour stew cooked with tender strips of beef.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
-      { id: "l2", en: "Shiro", am: "ሽሮ", price: 200, badge: "Fasting", desc: "Classic seasoned powdered chickpea stew served bubbling hot.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
-      { id: "l3", en: "Shiro with butter", am: "ሽሮ በቅቤ", price: 230, desc: "Aromatic chickpea stew finished with spiced niter kibbeh butter.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
-      { id: "l4", en: "Tegabino", am: "ተጋቢኖ", price: 280, badge: "Chef's Special", desc: "Thick spiced shiro served boiling hot in a clay pot.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
-      { id: "l5", en: "Pasta with sauce", am: "ፓስታ በስጎ", price: 250, badge: "Fasting", desc: "Italian spaghetti tossed in rich tomato garlic herb marinara.", img: "https://images.unsplash.com/photo-1621996346565-e3d5d6281273?auto=format&fit=crop&w=600&q=80" },
-      { id: "l6", en: "Pasta with meat", am: "ፓስታ በስጋ", price: 350, desc: "Spaghetti served with savory minced meat bolognaise sauce.", img: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80" },
-      { id: "l7", en: "Pasta with vegetable", am: "ፓስታ በአትክልት", price: 300, badge: "Fasting", desc: "Spaghetti sautéed with fresh carrots, zucchini and sweet peppers.", img: "https://images.unsplash.com/photo-1621996346565-e3d5d6281273?auto=format&fit=crop&w=600&q=80" },
-      { id: "l8", en: "Pasta with egg", am: "ፓስታ በ እንቁላል", price: 300, desc: "Warm pasta served with fried egg toppings.", img: "https://images.unsplash.com/photo-1621996346565-e3d5d6281273?auto=format&fit=crop&w=600&q=80" },
-      { id: "l9", en: "Tmatim lebeleb", am: "ቲማቲም ለብለብ", price: 180, badge: "Fasting", desc: "Sautéed fresh tomato salad with jalapenos and onions.", img: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19655?auto=format&fit=crop&w=600&q=80" },
-      { id: "l10", en: "Tmatim sils", am: "ቲማቲም ስልስ", price: 200, badge: "Fasting", desc: "Slow-cooked savory tomato gravy served hot.", img: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19655?auto=format&fit=crop&w=600&q=80" },
-      { id: "l11", en: "Firfir", am: "ፍርፍር", price: 200, desc: "Shredded injera soaked in spiced berbere onion stew.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
-      { id: "l12", en: "Firfir with egg", am: "ፍርፍር በእንቁላል", price: 250, desc: "Injera firfir topped with hard boiled or fried egg.", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" },
-      { id: "l13", en: "Tibs firfir", am: "ጥብስ ፍርፍር", price: 350, badge: "Popular", desc: "Shredded injera mixed with tender sautéed beef tibs cubes.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-      { id: "l14", en: "Sega firfir", am: "ስጋ ፍርፍር", price: 320, desc: "Injera firfir stew cooked with savory beef pieces.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-      { id: "l15", en: "Quanta firfir", am: "ቐንጣ ፍርፍር", price: 420, desc: "Injera cooked with dried cured beef strips (quanta).", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-      { id: "l16", en: "Tibs", am: "ጥብስ", price: 450, badge: "Popular", desc: "Pan-fried beef cubes sautéed with onions, rosemary and green pepper.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-      { id: "l17", en: "Dulet", am: "ዱለት", price: 350, desc: "Finely minced beef, tripe and liver sautéed with kibbeh butter and chilli.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" }
+      { id: "l1", en: "Bozena shiro", am: "ቦዘና ሽሮ", price: 350, badge: "Popular", desc: "Rich chickpea flour stew cooked with tender strips of beef.", img: "images/bozena shiro.jpg" },
+      { id: "l2", en: "Shiro", am: "ሽሮ", price: 200, badge: "Fasting", desc: "Classic seasoned powdered chickpea stew served bubbling hot.", img: "images/shiro.jpg" },
+      { id: "l3", en: "Shiro with butter", am: "ሽሮ በቅቤ", price: 230, desc: "Aromatic chickpea stew finished with spiced niter kibbeh butter.", img: "images/shiro with butter.jpg" },
+      { id: "l4", en: "Tegabino", am: "ተጋቢኖ", price: 280, badge: "Chef's Special", desc: "Thick spiced shiro served boiling hot in a clay pot.", img: "images/tegabino.jpg" },
+      { id: "l5", en: "Pasta with sauce", am: "ፓስታ በስጎ", price: 250, badge: "Fasting", desc: "Italian spaghetti tossed in rich tomato garlic herb marinara.", img: "images/pasta with sauce.jpg" },
+      { id: "l6", en: "Pasta with meat", am: "ፓስታ በስጋ", price: 350, desc: "Spaghetti served with savory minced meat bolognaise sauce.", img: "images/pasta with egg.jpg" },
+      { id: "l7", en: "Pasta with vegetable", am: "ፓስታ በአትክልት", price: 300, badge: "Fasting", desc: "Spaghetti sautéed with fresh carrots, zucchini and sweet peppers.", img: "images/pasta with vegetable.jpg" },
+      { id: "l8", en: "Pasta with egg", am: "ፓስታ በ እንቁላል", price: 300, desc: "Warm pasta served with fried egg toppings.", img: "images/pasta with egg.jpg" },
+      { id: "l9", en: "Tmatim lebeleb", am: "ቲማቲም ለብለብ", price: 180, badge: "Fasting", desc: "Sautéed fresh tomato salad with jalapenos and onions.", img: "images/tmatim lebeleb.jpg" },
+      { id: "l10", en: "Tmatim sils", am: "ቲማቲም ስልስ", price: 200, badge: "Fasting", desc: "Slow-cooked savory tomato gravy served hot.", img: "images/tmatim sils.jpg" },
+      { id: "l11", en: "Firfir", am: "ፍርፍር", price: 200, desc: "Shredded injera soaked in spiced berbere onion stew.", img: "images/firfir.jpg" },
+      { id: "l12", en: "Firfir with egg", am: "ፍርፍር በእንቁላል", price: 250, desc: "Injera firfir topped with hard boiled or fried egg.", img: "images/firfir with eagg.jpg" },
+      { id: "l13", en: "Tibs firfir", am: "ጥብስ ፍርፍር", price: 350, badge: "Popular", desc: "Shredded injera mixed with tender sautéed beef tibs cubes.", img: "images/tibs firfir.jpeg" },
+      { id: "l14", en: "Sega firfir", am: "ስጋ ፍርፍር", price: 320, desc: "Injera firfir stew cooked with savory beef pieces.", img: "images/sega firfir.jpeg" },
+      { id: "l15", en: "Quanta firfir", am: "ቐንጣ ፍርፍር", price: 420, desc: "Injera cooked with dried cured beef strips (quanta).", img: "images/Quanta Firfir.jpg" },
+      { id: "l16", en: "Tibs", am: "ጥብስ", price: 450, badge: "Popular", desc: "Pan-fried beef cubes sautéed with onions, rosemary and green pepper.", img: "images/tibs.jpg" },
+      { id: "l17", en: "Dulet", am: "ዱለት", price: 350, desc: "Finely minced beef, tripe and liver sautéed with kibbeh butter and chilli.", img: "images/DULET.jpg" }
     ]
   },
   {
@@ -806,16 +938,16 @@ const menuData = [
     catAm: "በርገር እና ሸዋርማ",
     icon: "🍔",
     items: [
-      { id: "u1", en: "Special burger", am: "እስፔሻል በርገር", price: 600, badge: "Chef's Special", desc: "Juicy beef patty topped with melted cheese, fried egg, lettuce and house sauce.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
-      { id: "u2", en: "Double burger", am: "ደብል በርገር", price: 550, desc: "Two thick grilled beef patties layered with melted cheddar cheese.", img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" },
-      { id: "u3", en: "Beef burger", am: "ቢፍ በርገር", price: 450, badge: "Popular", desc: "Grilled beef patty with onions, pickles, tomato and soft burger bun.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
-      { id: "u4", en: "Chicken burger", am: "ቺክን በርገር", price: 600, desc: "Crispy fried or grilled chicken breast fillet with mayo lettuce.", img: "https://images.unsplash.com/photo-1615297928064-24977384d0da?auto=format&fit=crop&w=600&q=80" },
-      { id: "u5", en: "Cheesy burger", am: "ቺዝ በርገር", price: 500, desc: "Beef patty smothered with extra melted cheese slices.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
-      { id: "u6", en: "Beef wrap", am: "ቢፍ ሸዋርማ", price: 400, desc: "Seasoned grilled beef strips wrapped tightly in warm pita flatbread.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" },
-      { id: "u7", en: "Chicken wrap", am: "ቺክን ሸዋርማ", price: 500, desc: "Sliced garlic roasted chicken wrapped with veggies and cream sauce.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" },
-      { id: "u8", en: "Tuna wrap", am: "ቱና ሸዋርማ", price: 480, desc: "Seasoned tuna flakes with crunchy lettuce wrapped in flat bread.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" },
-      { id: "u9", en: "Veggie wrap", am: "አትክልት ሸዋርማ", price: 300, badge: "Fasting", desc: "Fresh avocado, grilled veggies and garlic spread wrapped in pita.", img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80" },
-      { id: "u10", en: "Special wrap", am: "እስፔሻል ሸዋርማ", price: 500, desc: "Meat, cheese and house sauce wrapped in grilled tortilla.", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80" }
+      { id: "u1", en: "Special burger", am: "እስፔሻል በርገር", price: 600, badge: "Chef's Special", desc: "Juicy beef patty topped with melted cheese, fried egg, lettuce and house sauce.", img: "images/cheesy burger.jpg" },
+      { id: "u2", en: "Double burger", am: "ደብል በርገር", price: 550, desc: "Two thick grilled beef patties layered with melted cheddar cheese.", img: "images/cheesy burger.jpg" },
+      { id: "u3", en: "Beef burger", am: "ቢፍ በርገር", price: 450, badge: "Popular", desc: "Grilled beef patty with onions, pickles, tomato and soft burger bun.", img: "images/beef burger.jpg" },
+      { id: "u4", en: "Chicken burger", am: "ቺክን በርገር", price: 600, desc: "Crispy fried or grilled chicken breast fillet with mayo lettuce.", img: "images/beef burger.jpg" },
+      { id: "u5", en: "Cheesy burger", am: "ቺዝ በርገር", price: 500, desc: "Beef patty smothered with extra melted cheese slices.", img: "images/cheesy burger.jpg" },
+      { id: "u6", en: "Beef wrap", am: "ቢፍ ሸዋርማ", price: 400, desc: "Seasoned grilled beef strips wrapped tightly in warm pita flatbread.", img: "images/beef wrap.jpg" },
+      { id: "u7", en: "Chicken wrap", am: "ቺክን ሸዋርማ", price: 500, desc: "Sliced garlic roasted chicken wrapped with veggies and cream sauce.", img: "images/beef wrap.jpg" },
+      { id: "u8", en: "Tuna wrap", am: "ቱና ሸዋርማ", price: 480, desc: "Seasoned tuna flakes with crunchy lettuce wrapped in flat bread.", img: "images/tuna wrap.jpg" },
+      { id: "u9", en: "Veggie wrap", am: "አትክልት ሸዋርማ", price: 300, badge: "Fasting", desc: "Fresh avocado, grilled veggies and garlic spread wrapped in pita.", img: "images/veggie wrap.jpg" },
+      { id: "u10", en: "Special wrap", am: "እስፔሻል ሸዋርማ", price: 500, desc: "Meat, cheese and house sauce wrapped in grilled tortilla.", img: "images/special wrap.jpg" }
     ]
   },
   {
@@ -839,20 +971,20 @@ const menuData = [
     icon: "🍿",
     items: [
       { id: "s1", en: "Sambusa", am: "ሳምቡሳ", price: 45, badge: "Popular", desc: "Crispy fried triangular pastry filled with spiced lentils or minced beef.", img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80" },
-      { id: "s2", en: "Ertibe with pita", am: "እርጥብ በቂጣ", price: 200, desc: "Traditional dip served with warm baked pita bread.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
-      { id: "s3", en: "Special ertibe with pita", am: "እስፔሻል እርጥብ በቂጣ", price: 250, desc: "Rich ertibe blend served with hot pita.", img: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80" },
-      { id: "s4", en: "French fries", am: "ቺብስ", price: 200, desc: "Golden salted crispy potato fries served with ketchup.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" },
-      { id: "s5", en: "Tuna extra", am: "ቱና", price: 100, desc: "Additional side portion of tuna.", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" },
-      { id: "s6", en: "Egg extra", am: "እንቁላል", price: 50, desc: "Extra boiled or fried egg.", img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80" },
-      { id: "s7", en: "Ketchup", am: "ካቻፕ", price: 25, desc: "Tomato ketchup portion.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" },
-      { id: "s8", en: "Mayonnaise", am: "ማዮኒዝ", price: 50, desc: "Creamy mayonnaise dip.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" },
-      { id: "s9", en: "Honey", am: "ማር", price: 25, desc: "Pure organic Ethiopian honey dip.", img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80" },
-      { id: "s10", en: "Aluminium foil", am: "አልሙኒም ፎይል", price: 20, desc: "Wrapping takeaway foil.", img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80" },
-      { id: "s11", en: "Yoghurt", am: "እርጎ", price: 20, desc: "Side plain yoghurt cup.", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" },
-      { id: "s12", en: "Chilli", am: "ዳጣ", price: 20, desc: "Spiced green chilli paste (data).", img: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19655?auto=format&fit=crop&w=600&q=80" },
-      { id: "s13", en: "Syrup", am: "ሲራፕ", price: 25, desc: "Sweet syrup topping.", img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80" },
+      { id: "s2", en: "Ertibe with pita", am: "እርጥብ በቂጣ", price: 200, desc: "Traditional dip served with warm baked pita bread.", img: "images/ertibe with pita .jpg" },
+      { id: "s3", en: "Special ertibe with pita", am: "እስፔሻል እርጥብ በቂጣ", price: 250, desc: "Rich ertibe blend served with hot pita.", img: "images/special ertib with pita.jpg" },
+      { id: "s4", en: "French fries", am: "ቺብስ", price: 200, desc: "Golden salted crispy potato fries served with ketchup.", img: "images/french fries.png" },
+      { id: "s5", en: "Tuna extra", am: "ቱና", price: 100, desc: "Additional side portion of tuna.", img: "images/tuna extra.jpg" },
+      { id: "s6", en: "Egg extra", am: "እንቁላል", price: 50, desc: "Extra boiled or fried egg.", img: "images/egg extra.jpg" },
+      { id: "s7", en: "Ketchup", am: "ካቻፕ", price: 25, desc: "Tomato ketchup portion.", img: "images/ketchup extra.jpg" },
+      { id: "s8", en: "Mayonnaise", am: "ማዮኒዝ", price: 50, desc: "Creamy mayonnaise dip.", img: "images/mayonnaise .jpg" },
+      { id: "s9", en: "Honey", am: "ማር", price: 25, desc: "Pure organic Ethiopian honey dip.", img: "images/honey.jpg" },
+      { id: "s10", en: "Aluminium foil", am: "አልሙኒም ፎይል", price: 20, desc: "Wrapping takeaway foil.", img: "images/aluminium foil.jpg" },
+      { id: "s11", en: "Yoghurt", am: "እርጎ", price: 20, desc: "Side plain yoghurt cup.", img: "images/yoghurt.jpeg" },
+      { id: "s12", en: "Chilli", am: "ዳጣ", price: 20, desc: "Spiced green chilli paste (data).", img: "images/chilli.jpg" },
+      { id: "s13", en: "Syrup", am: "ሲራፕ", price: 25, desc: "Sweet syrup topping.", img: "images/syrup.jpg" },
       { id: "s14", en: "Bread", am: "ዳቦ", price: 20, desc: "Extra slice of fresh bread.", img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" },
-      { id: "s15", en: "Takeaway boxes & cups", am: "ቴካዌ እቃዎች", price: 30, desc: "Takeaway packaging boxes and cups.", img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80" }
+      { id: "s15", en: "Takeaway boxes & cups", am: "ቴካዌ እቃዎች", price: 30, desc: "Takeaway packaging boxes and cups.", img: "images/takeaway boxes and cups.jpg" }
     ]
   },
   {
@@ -873,15 +1005,15 @@ const menuData = [
     catAm: "እርጎ እና ለስላሳ",
     icon: "🥤",
     items: [
-      { id: "y1", en: "Yoghurt with honey", am: "እርጎ በ ማር", price: 150, desc: "Creamy fresh yoghurt drizzled with pure Ethiopian honey.", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" },
-      { id: "y2", en: "Yoghurt with red chilli", am: "እርጎ በ ሚጥሚጣ", price: 110, desc: "Fresh yoghurt sprinkled with spicy mitmita pepper powder.", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" },
-      { id: "y3", en: "Flax", am: "ተልባ", price: 130, desc: "Healthy roasted flaxseed drink (telba).", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80" },
-      { id: "y4", en: "Flax mix with seasonal fruits", am: "ተልባ በወተት", price: 200, desc: "Flaxseed smoothie blended with fresh milk and fruit.", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80" },
-      { id: "y5", en: "Novida", am: "ኖቪዳ", price: 60, desc: "Bottled sparkling apple drink.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" },
-      { id: "y6", en: "Ambo water", am: "አምቦውሃ", price: 60, desc: "Naturally carbonated mineral water.", img: "https://images.unsplash.com/photo-1560023907-5f339617ea30?auto=format&fit=crop&w=600&q=80" },
-      { id: "y7", en: "Fanta / Sprite", am: "ፋንታ / ስፕራይት", price: 60, desc: "Chilled bottled soft drink.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" },
-      { id: "y8", en: "Negus", am: "ንጉስ", price: 90, desc: "Malt non-alcoholic beverage.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" },
-      { id: "y9", en: "Bottled mineral water", am: "ውሃ", price: 40, desc: "Pure spring drinking water (0.5L / 1L / 2L).", img: "https://images.unsplash.com/photo-1560023907-5f339617ea30?auto=format&fit=crop&w=600&q=80" }
+      { id: "y1", en: "Yoghurt with honey", am: "እርጎ በ ማር", price: 150, desc: "Creamy fresh yoghurt drizzled with pure Ethiopian honey.", img: "images/yoghurt with honey.jpeg" },
+      { id: "y2", en: "Yoghurt with red chilli", am: "እርጎ በ ሚጥሚጣ", price: 110, desc: "Fresh yoghurt sprinkled with spicy mitmita pepper powder.", img: "images/yoghurt with chili.jpg" },
+      { id: "y3", en: "Flax", am: "ተልባ", price: 130, desc: "Healthy roasted flaxseed drink (telba).", img: "images/flax.jpg" },
+      { id: "y4", en: "Flax mix with seasonal fruits", am: "ተልባ በወተት", price: 200, desc: "Flaxseed smoothie blended with fresh milk and fruit.", img: "images/flax with seasonal fruits.jpg" },
+      { id: "y5", en: "Novida", am: "ኖቪዳ", price: 60, desc: "Bottled sparkling apple drink.", img: "images/novida.jpg" },
+      { id: "y6", en: "Ambo water", am: "አምቦውሃ", price: 60, desc: "Naturally carbonated mineral water.", img: "images/ambo water.jpg" },
+      { id: "y7", en: "Fanta / Sprite", am: "ፋንታ / ስፕራይት", price: 60, desc: "Chilled bottled soft drink.", img: "images/fanta  sprite.jpg" },
+      { id: "y8", en: "Negus", am: "ንጉስ", price: 90, desc: "Malt non-alcoholic beverage.", img: "images/negus.jpg" },
+      { id: "y9", en: "Bottled mineral water", am: "ውሃ", price: 40, desc: "Pure spring drinking water (0.5L / 1L / 2L).", img: "images/bottled mineral water.jpg" }
     ]
   },
   {
@@ -892,13 +1024,13 @@ const menuData = [
     items: [
       { id: "j1", en: "Mixed fruit juice", am: "ሚክስድ ጁስ", price: 250, badge: "Popular", desc: "Layered fresh smoothie of mango, papaya and avocado.", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80" },
       { id: "j2", en: "Mango juice", am: "ማንጎ ጁስ", price: 220, desc: "Thick freshly squeezed organic tropical mango nectar.", img: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=600&q=80" },
-      { id: "j3", en: "Papaya juice", am: "ፓፓያ ጁስ", price: 200, desc: "Fresh sweet papaya smoothie with lime twist.", img: "https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=600&q=80" },
-      { id: "j4", en: "Avocado juice", am: "አቮካዶ ጁስ", price: 220, desc: "Rich creamy avocado smoothie served with fresh lemon juice.", img: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&w=600&q=80" },
-      { id: "j5", en: "Strawberry mojito", am: "እስትሮቨሪ ሞጂቶ", price: 250, desc: "Crushed fresh strawberries, mint, lime and sparkling soda over ice.", img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80" },
-      { id: "j6", en: "Orange mojito", am: "ኦሬንጅ ሞጂቶ", price: 250, desc: "Fresh citrus orange crushed with spearmint and soda.", img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80" },
-      { id: "j7", en: "Mint mojito", am: "ሜንት ሞጂቶ", price: 250, desc: "Classic ice cold mint and fresh lime virgin cocktail.", img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80" },
-      { id: "j8", en: "Tropical blue", am: "ትሮፒካል ብሉ", price: 250, badge: "Special", desc: "Exotic blue curaçao citrus mocktail served chilled.", img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" },
-      { id: "j9", en: "Mango and coconut", am: "ማንጎ እና ኮኮናት", price: 250, desc: "Creamy coconut milk blended with ripe tropical mangoes.", img: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=600&q=80" },
+      { id: "j3", en: "Papaya juice", am: "ፓፓያ ጁስ", price: 200, desc: "Fresh sweet papaya smoothie with lime twist.", img: "images/papaya juice.jpg" },
+      { id: "j4", en: "Avocado juice", am: "አቮካዶ ጁስ", price: 220, desc: "Rich creamy avocado smoothie served with fresh lemon juice.", img: "images/avocado juice.jpg" },
+      { id: "j5", en: "Strawberry mojito", am: "እስትሮቨሪ ሞጂቶ", price: 250, desc: "Crushed fresh strawberries, mint, lime and sparkling soda over ice.", img: "images/strawberry mojito.jpg" },
+      { id: "j6", en: "Orange mojito", am: "ኦሬንጅ ሞጂቶ", price: 250, desc: "Fresh citrus orange crushed with spearmint and soda.", img: "images/orange mojito.jpg" },
+      { id: "j7", en: "Mint mojito", am: "ሜንት ሞጂቶ", price: 250, desc: "Classic ice cold mint and fresh lime virgin cocktail.", img: "images/mint mojito.jpg" },
+      { id: "j8", en: "Tropical blue", am: "ትሮፒካል ብሉ", price: 250, badge: "Special", desc: "Exotic blue curaçao citrus mocktail served chilled.", img: "images/tropical blue.jpg" },
+      { id: "j9", en: "Mango and coconut", am: "ማንጎ እና ኮኮናት", price: 250, desc: "Creamy coconut milk blended with ripe tropical mangoes.", img: "images/mango and coconut.jpg" },
       { id: "j10", en: "J Nat special", am: "ጄ ናት እስፔሻል", price: 250, badge: "Chef's Special", desc: "Our signature house blend fruit mocktail topped with crushed mint.", img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" }
     ]
   }
@@ -907,7 +1039,7 @@ const menuData = [
 /* State Variables */
 let currentCategory = "all";
 let searchKeyword = "";
-let cart = {}; // { itemId: quantity }
+let cart = {};
 let currentModalItem = null;
 let currentModalQty = 1;
 
@@ -1146,7 +1278,7 @@ function updateCartQty(id, delta) {
     if (cart[id] <= 0) delete cart[id];
   }
   updateOrderBar();
-  openCartModal(); // Refresh cart modal
+  openCartModal();
 }
 
 /* Helper copy text */
